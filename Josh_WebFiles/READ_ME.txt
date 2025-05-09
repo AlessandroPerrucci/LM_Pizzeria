@@ -4,10 +4,10 @@ ATTENZIONE:
 non avendo il database MySQL questo sito non funziona (almeno per le query)
 
 Struttura del sito:
-		  ______________________home.php______________________
+		                ______________________home.php______________________
 
-		/                           |                           \
-          Database_test.php          Design_test.php               admin_login.php
+		            /                           |                           \
+            Database_test.php            Design_test.php               admin_login.php
            /             \
     sign_up.php        user_page.php
 
