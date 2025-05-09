@@ -1,0 +1,28 @@
+html{
+  height: 100%;
+}
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+/*Above code is used to push the footer to the bottom of the page, no matter the size
+  if footer does not contain "margin-top: auto;" this does not work!
+*/
+footer{
+  display: flex;
+  align-items: left;
+  gap: 50px; /*Footer columns distance */
+  /* margin size*/
+  margin-top: auto; /* Distance from the last item */
+  margin-left: -9px;
+  margin-right: -9px;
+  margin-bottom: -50px;
+  /* Padding a.k.a background color size */
+  padding-left: 5px;
+  padding-top: 35px;
+  padding-bottom: 20px;
+  background-color: rgb(81, 114, 190);
+
+}
+

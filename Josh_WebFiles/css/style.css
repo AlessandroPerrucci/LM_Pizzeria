@@ -1,0 +1,56 @@
+.logo{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.logoImage{
+  width: 50px;
+}
+.logoText{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 40px;
+  color: rgb(157, 11, 11);
+}
+.newSection{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.newImage{
+  width: 20px;
+
+}
+.newText{
+  font-size: 10px;
+}
+h1 {
+    margin-bottom: -40px;
+    color: purple;
+    font-size: 80px;
+    text-align: center;
+}
+
+p {
+  font-family:'Times New Roman', Times, serif;
+  font-weight:regular;
+  line-height: 1.4;
+  margin-block: 1px;
+}
+h3{
+  margin-block: 2px
+}
+
+section{
+  margin-block: 50px;
+}
+
+main-logo {
+    position: absolute;
+    top: 5px;
+    left: 500px;
+    width: 50px;
+    height: auto;
+}
+
+
+
