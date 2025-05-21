@@ -192,7 +192,7 @@ function searchData($table, $searchField, $searchValue, $returnField)
     }
     echo "result direct: " . $result[0] . "<br>"; 
     echo "result raw: " . print_r($result) . "<br>" ;
-    if(count($result)=== 0 ||empty($array)){
+    if(count($result)=== 0 ||empty($result)){
         return "Nothing returned";
     }
     return $result;
