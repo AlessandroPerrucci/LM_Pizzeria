@@ -180,12 +180,15 @@ function searchData($table, $searchField, $searchValue, $returnField)
     if (is_null($searchField) || is_null($searchValue) || is_null($returnField) ||is_null($table)) {
         return null;
     } #minimal filtering
+    echo "stuff: ". $table;echo  "  " . $searchField; echo $searchValue; echo $returnField;
     $table = ucfirst($table); #table name always starts with a capital.
+    echo "capitalized: " . $table;
     $result = [];
     $item = searchItem($table, $searchField, $searchValue); #returns whole query of row
     while ($row = $item->fetch_assoc()) {
         $result[] = $row[$returnField];
     }
+    echo $result[0];
     return $result;
 }
 
