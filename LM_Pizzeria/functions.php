@@ -150,19 +150,20 @@ function searchItem($table, $column, $value)
  * @param $id       The ID of the item
  * @param $field    The desired field of the item
  * 
- * @return value    returns a value of any type (i.e String, int, bool, etc...)
+ * @return value    returns a singular value of any type (i.e String, int, bool, etc...)
  */
 function getData($table, $id, $field)
 {
-    if (is_null($id)) {
+    if (is_null($table) ||is_null($id)) {
         return null;
     } #minimal filtering
     $table = strtolower($table); #table name is always full lowercase.
     $item = getItem($table, $id)->fetch_assoc();
+    echo $item[$field];
     if(is_null($item)){
         return 'Nothing returned';
     }
-    return $item;
+    return $item[$field];
 }
 /**
  * Searches a column from the table, for all rows with corresponding value
@@ -183,7 +184,7 @@ function searchData($table, $searchField, $searchValue, $returnField)
     if (is_null($searchField) || is_null($searchValue) || is_null($returnField) ||is_null($table)) {
         return null;
     } #minimal filtering
-    $table = ucfirst($table); #table name always starts with a capital.
+    $table = strtolower($table); #table name is always full lowercase
     $result = [];
     $item = searchItem($table, $searchField, $searchValue); #returns whole query of row
     while ($row = $item->fetch_assoc()) {
