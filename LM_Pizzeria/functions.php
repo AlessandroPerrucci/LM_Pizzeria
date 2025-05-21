@@ -25,14 +25,14 @@ function quer($query)
 function getPK($table)
 {
     switch ($table) {
-        case "users":
-            return "email";
         case "utenti":
             return "email";
-        case "ingredienti":
-            return "ingredienti_ID";
-        case "pizza":
-            return "pizza_ID";
+        case "pizze":
+            return "ID_pizza";
+        case "ordine":
+            return "ID_ordine";
+        case "servizio":
+            return "ID_servizio";
         default:
             return "ID";
     }

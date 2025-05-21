@@ -8,7 +8,9 @@
     <body>
         <h1> pagina di testing </h1> <br>
         <p> Test connessione MySQL <p> <br>
-        <?php print(searchData("Utenti", "Email", str("default@gmail.com"),"password")[0]); ?>
+        <?php print("data here: " . searchData("Utenti", "Email", str("default@gmail.com"),"password")[0]); ?> <br>
+        <?php print("get PK: " . getPK("utenti")); ?> <br>
+        <?php print("getData: " . getData("utenti",str("default@email.com"), "password"));?>
     </body>
 </html>
 
