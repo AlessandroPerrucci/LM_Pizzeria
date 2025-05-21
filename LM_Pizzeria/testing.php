@@ -15,10 +15,9 @@
                 echo "✅ Connected successfully to Altervista MySQL";
             }
             ?> <br>
-        <?php print("data here: " . searchData("utenti", "email", str("default@email.com"),"password")[0] . "<br>"); ?> <br>
-         <?php print("data here: " . searchData("utenti", "email", str("default@email.com"),"password") . "<br>"); ?> <br>
+        <?php print("Return here: " . searchData("utenti", "email", str("default@email.com"),"password")[0] . "<br>"); ?> <br>
         <?php print("get PK: " . getPK("utenti") . "<br>" ); ?> <br>
-           <?php print("getData: " . getData("Utenti",str("default@email.com"), "password") . "<br>" );?> <br>
+          <?php print("getData: " . getData("Utenti",str("default@email.com"), "password") . "<br>" );?> <br>
     </body>
 </html>
 

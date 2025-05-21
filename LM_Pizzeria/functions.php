@@ -24,15 +24,16 @@ function quer($query)
  */
 function getPK($table)
 {
+     $table = strtolower($table);
     switch ($table) {
-        case "utenti":
+        case "utente":
             return "email";
-        case "pizze":
-            return "ID_pizza";
-        case "ordine":
-            return "ID_ordine";
-        case "servizio":
-            return "ID_servizio";
+        case "gruppo":
+            return "nome";
+        case "FillMe":
+            return "FillMe";
+        case "none":
+            return "none";
         default:
             return "ID";
     }
@@ -115,14 +116,14 @@ function getInput($name, $type = "string")
 /**
  * 
  * @param string $table    The table that contains the item
- * @param string/int $id       The item ID (Primary Key) used to identify it
+ * @param string/int $id       The item ID (Primary Key) used to identify it (use str on Strings values)
  * 
  * @return query    returns the entire query data raw.
  */
 function getItem($table, $id)
 {
     $pk = getPK($table);
-    $query = "SELECT * FROM $table WHERE $pk = '$id'; ";
+    $query = "SELECT * FROM $table WHERE $pk = $id; ";
     return quer($query);
 }
 /**
@@ -156,7 +157,7 @@ function getData($table, $id, $field)
     if (is_null($id)) {
         return null;
     } #minimal filtering
-    $table = ucfirst($table); #table name always starts with a capital.
+    $table = strtolower($table); #table name is always full lowercase.
     $item = getItem($table, $id)->fetch_assoc();
     if(is_null($item)){
         return 'Nothing returned';
@@ -182,16 +183,12 @@ function searchData($table, $searchField, $searchValue, $returnField)
     if (is_null($searchField) || is_null($searchValue) || is_null($returnField) ||is_null($table)) {
         return null;
     } #minimal filtering
-    echo "stuff: ". $table . "<br>" ;echo  "  " . $searchField . "<br>" ; echo $searchValue . "<br>"; echo $returnField . "<br>";
     $table = ucfirst($table); #table name always starts with a capital.
-    echo "capitalized: " . $table . "<br>";
     $result = [];
     $item = searchItem($table, $searchField, $searchValue); #returns whole query of row
     while ($row = $item->fetch_assoc()) {
         $result[] = $row[$returnField];
     }
-    echo "result direct: " . $result[0] . "<br>"; 
-    echo "result raw: " . print_r($result) . "<br>" ;
     if(count($result)=== 0 ||empty($result)){
         return "Nothing returned";
     }
@@ -202,12 +199,11 @@ function searchData($table, $searchField, $searchValue, $returnField)
  * Currently just a blue print for a "addUser" function, 
  * to be completed after database is set up
  */
-function addUsers($email, $username, $password, $info1, $info2)
+function addUsers($email, $password, $nickname, $nome, $cognome, $foto_profilo, $bio, $favorite_pizza = null, $str_preferenze = '0', $gruppo, $recensione = null)
 {
-    $query = "INSERT INTO users (email, username, pass, info1, info2) VALUES 
-        (\'$email\',\'$username\', \'$password\',\'$info1\', \'$info2\');";
+    $query = "INSERT INTO users (email, password, nickname, nome, cognome, foto_profilo, bio, favorite_pizza, str_preferenze, gruppo, recensione) VALUES 
+        (str($email), str($password), str($nickname), str($nome), str($cognome), $foto_profilo, $str_preferenze, $gruppo, $recensione;";
     quer($query);
-    echo "user added succesfully";
 }
 /**
  * Verifies a user by checking if the password associated with $email in the database
