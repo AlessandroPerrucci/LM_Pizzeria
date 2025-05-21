@@ -3,9 +3,9 @@
  * the only purpose of this file is to correctly connect to the database, this code was tested on XAMPP
  */
 $servername = "localhost";  //MySQL server 
-$username = "ROOT";         //default username
-$password = "changeme";     //default password
-$dbname = "XAMPP-database";
+$username = "lmpizzeria";         //default username
+$password = " ";     //default password
+$dbname = "my_lmpizzeria";
 
 //Start Connection
 $connection = new mysqli($servername,$username,$password,$dbname);
