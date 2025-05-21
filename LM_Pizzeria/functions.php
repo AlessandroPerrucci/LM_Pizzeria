@@ -159,7 +159,7 @@ function getData($table, $id, $field)
     $table = ucfirst($table); #table name always starts with a capital.
     $item = getItem($table, $id)->fetch_assoc();
     if(is_null($item)){
-        return "Nothing returned";
+        return 'Nothing returned';
     }
     return $item;
 }
@@ -191,7 +191,7 @@ function searchData($table, $searchField, $searchValue, $returnField)
         $result[] = $row[$returnField];
     }
     echo "result direct: " . $result[0] . "<br>"; 
-    echo "result raw: " . print_r($result);
+    echo "result raw: " . print_r($result) . "<br>" ;
     if(count($result)=== 0 ||empty($array)){
         return "Nothing returned";
     }
