@@ -158,7 +158,9 @@ function getData($table, $id, $field)
     } #minimal filtering
     $table = ucfirst($table); #table name always starts with a capital.
     $item = getItem($table, $id)->fetch_assoc();
-
+    if(is_null($item)){
+        return "Nothing returned";
+    }
     return $item;
 }
 /**
@@ -190,6 +192,9 @@ function searchData($table, $searchField, $searchValue, $returnField)
     }
     echo "result direct: " . $result[0] . "<br>"; 
     echo "result raw: " . print_r($result);
+    if(count($result)=== 0 ||empty($array)){
+        return "Nothing returned";
+    }
     return $result;
 }
 
