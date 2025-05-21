@@ -156,6 +156,7 @@ function getData($table, $id, $field)
     if (is_null($id)) {
         return null;
     } #minimal filtering
+    $table = ucfirst($table); #table name always starts with a capital.
     $item = getItem($table, $id)->fetch_assoc();
 
     return $item;
@@ -176,6 +177,10 @@ function getData($table, $id, $field)
  */
 function searchData($table, $searchField, $searchValue, $returnField)
 {
+    if (is_null($searchField) || is_null($searchValue) || is_null($returnField) ||is_null($table)) {
+        return null;
+    } #minimal filtering
+    $table = ucfirst($table); #table name always starts with a capital.
     $result = [];
     $item = searchItem($table, $searchField, $searchValue); #returns whole query of row
     while ($row = $item->fetch_assoc()) {

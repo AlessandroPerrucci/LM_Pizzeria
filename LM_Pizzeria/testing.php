@@ -14,10 +14,10 @@
             } else {
                 echo "✅ Connected successfully to Altervista MySQL";
             }
-            ?>
+            ?> <br>
         <?php print("data here: " . searchData("Utenti", "Email", str("default@gmail.com"),"password")[0]); ?> <br>
         <?php print("get PK: " . getPK("utenti")); ?> <br>
-        <?php print("getData: " . getData("utenti",str("default@email.com"), "password"));?>
+        <?php print("getData: " . getData("utenti",str("default@email.com"), "password"));?> <br>
     </body>
 </html>
 
