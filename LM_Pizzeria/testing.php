@@ -15,10 +15,14 @@
                 echo "✅ Connected successfully to Altervista MySQL";
             }
             ?> <br>
-        <?php print("data here: " . searchData("Utenti", "Email", str("default@gmail.com"),"password")[0]); ?> <br>
+        <?php print("data here: " . searchData("utenti", "email", str("default@gmail.com"),"password")[0]); ?> <br>
+         <?php print("data here2 --> : " . searchData("Utenti", "Email", str("default@gmail.com"),"password")[0]); ?> <br>
         <?php print("get PK: " . getPK("utenti")); ?> <br>
         <?php print("getData: " . getData("utenti",str("default@email.com"), "password"));?> <br>
+           <?php print("getData: " . getData("Utenti",str("default@email.com"), "password"));?> <br>
     </body>
 </html>
 
-INSERT INTO Utenti (Email, password) VALUES ("default@email.com", "default12345")
+
+this works correctly: SELECT * FROM Utenti WHERE email = "default@email.com"
+this does not SELECT * FROM utenti WHERE email = "default@email.com" --> table needs capital
