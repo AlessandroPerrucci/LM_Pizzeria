@@ -17,19 +17,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($password !== $conferma) {
         $errors[] = "Le password non coincidono.";
     } else {
-        $stmt = $pdo->prepare("SELECT id FROM utente WHERE email = :email");
+        $stmt = $pdo->prepare("SELECT email FROM utente WHERE email = :email");
         $stmt->execute(['email' => $email]);
         if ($stmt->fetch()) {
             $errors[] = "Questa email è già registrata.";
         } else {
             $hashed = password_hash($password, PASSWORD_DEFAULT);
-            $insert = $pdo->prepare("INSERT INTO utente (email, nickname, password) VALUES (:email, :nickname, :password)");
+            $insert = $pdo->prepare("
+  INSERT INTO utente (email, nickname, password, str_preferenze, nome, cognome, gruppo, foto_profilo)
+  VALUES (:email, :nickname, :password, :str_preferenze, :nome, :cognome, :gruppo, :foto_profilo)
+");
+
             $insert->execute([
                 'email' => $email,
                 'nickname' => $nickname,
-                'password' => $hashed
+                'password' => $hashed,
+                'str_preferenze' => -1,
+                'nome' => 'default',
+                'cognome' => 'default',
+                'gruppo' => 'user',
+                'foto_profilo' => 'images/profilo/default.jpg'
             ]);
-            header("Location: login.php");
+
+            // Recupera l'utente appena creato per salvarlo in sessione
+            $stmt = $pdo->prepare("SELECT * FROM utente WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $_SESSION['user'] = $user;
+
+            // Reindirizza al profilo
+            header("Location: profilo.php");
             exit;
         }
     }
