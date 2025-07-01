@@ -1,0 +1,70 @@
+/* Personalizzazione generale del form */
+.form-profilo {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Etichette dei campi */
+.form-profilo label {
+    font-weight: 600;
+    color: #212529;
+    /* colore scuro e leggibile */
+}
+
+/* Input e textarea personalizzati */
+/* Le regole !important garantiscono che il testo sia visibile nonostante eventuali conflitti in style.css */
+.form-profilo input.form-control,
+.form-profilo textarea.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    color: #212529;
+}
+
+/* Focus state */
+.form-profilo input.form-control:focus,
+.form-profilo textarea.form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+/* Pulsante principale */
+.btn-custom-warning {
+    background-color: #ffc107;
+    border: none;
+    color: #212529;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+.btn-custom-warning:hover {
+    background-color: #c69500;
+    color: #fff;
+}
+
+/* Pulsante logout */
+.btn-logout {
+    margin-top: 1rem;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    font-weight: 500;
+    background: transparent;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+}
+
+.btn-logout:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
