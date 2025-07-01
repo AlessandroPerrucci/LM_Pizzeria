@@ -160,7 +160,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="text-center mb-4">
                 <?php if (!empty($utente['foto_profilo']) && file_exists($utente['foto_profilo'])): ?>
-                    <img src="<?= htmlspecialchars($utente['foto_profilo']) ?>" alt="Foto profilo" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #ffc107;">
+                    <?php
+                    $src = $utente['foto_profilo'] ?: 'images/profilo/default.jpg';
+                    ?>
+                    <img src="<?= $src ?>?v=<?= time() ?>" alt="Foto Profilo" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #ffc107;">
                 <?php else: ?>
                     <img src="images/profilo/default.png" alt="Foto profilo" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #ffc107;">
                 <?php endif; ?>
@@ -230,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <button type="submit" class="btn-custom-warning">Aggiorna Profilo</button>
                 </form>
             </div>
-            <div class="text-center" style="margin-top: 10px !important;">
+            <div class="text-center" style="margin-top: 15px !important;">
                 <a href="logout.php" class="btn-logout">Logout</a>
             </div>
         </div>
@@ -253,7 +256,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </script>
 
-    <footer class="ftco-footer ftco-section img">
+    <footer class="ftco-footer ftco-section img" style="margin-top: 8% !important;">
         <div class="overlay"></div>
         <div class="container">
             <div class="row mb-5">

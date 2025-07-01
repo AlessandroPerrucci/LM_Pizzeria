@@ -9,8 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nickname = trim($_POST["nickname"] ?? '');
     $password = trim($_POST["password"] ?? '');
     $conferma = trim($_POST["conferma"] ?? '');
+    $nome = trim($_POST["nome"] ?? '');
+    $cognome = trim($_POST["cognome"] ?? '');
 
-    if ($email === '' || $nickname === '' || $password === '' || $conferma === '') {
+    if ($email === '' || $nickname === '' || $password === '' || $conferma === '' || $nome === '' || $cognome === '') {
         $errors[] = "Tutti i campi sono obbligatori.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Email non valida.";
@@ -33,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'nickname' => $nickname,
                 'password' => $hashed,
                 'str_preferenze' => -1,
-                'nome' => 'default',
-                'cognome' => 'default',
+                'nome' => $nome,
+                'cognome' => $cognome,
                 'gruppo' => 'user',
                 'foto_profilo' => 'images/profilo/default.jpg'
             ]);
@@ -142,6 +144,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="nickname" class="form-label">Nickname</label>
                     <input type="text" name="nickname" id="nickname" class="form-control"
                         value="<?= isset($nickname) ? htmlspecialchars($nickname) : '' ?>" required
+                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" name="nome" id="nome" class="form-control"
+                        value="<?= isset($nome) ? htmlspecialchars($nome) : '' ?>" required
+                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="cognome" class="form-label">Cognome</label>
+                    <input type="text" name="cognome" id="cognome" class="form-control"
+                        value="<?= isset($cognome) ? htmlspecialchars($cognome) : '' ?>" required
                         style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
                 </div>
 
