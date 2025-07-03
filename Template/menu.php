@@ -74,7 +74,7 @@
 						<div class="text p-4">
 							<h3>Italian Pizza</h3>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia </p>
-							<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
+							<p class="price"><span>$2.90</span> <a href="ordina.php" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
 						</div>
 					</div>
 				</div>
