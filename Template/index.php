@@ -49,7 +49,7 @@
 					<div class="col-md-6 col-sm-12 ftco-animate">
 						<span class="subheading">Delicious</span>
 						<h1 class="mb-4">Italian Cuizine</h1>
-						<p class="mb-4 mb-md-5">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
 						<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
 					</div>
 					<div class="col-md-6 ftco-animate">
@@ -68,7 +68,7 @@
 					<div class="col-md-6 col-sm-12 order-md-last ftco-animate">
 						<span class="subheading">Crunchy</span>
 						<h1 class="mb-4">Italian Pizza</h1>
-						<p class="mb-4 mb-md-5">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
 						<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
 					</div>
 					<div class="col-md-6 ftco-animate">
@@ -86,8 +86,8 @@
 
 					<div class="col-md-7 col-sm-12 text-center ftco-animate">
 						<span class="subheading">Welcome</span>
-						<h1 class="mb-4">We cooked your desired Pizza Recipe</h1>
-						<p class="mb-4 mb-md-5">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+						<h1 class="mb-4">We make authentic Italian pizza, kept to the highest standards.</h1>
+						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
 						<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
 					</div>
 
@@ -105,7 +105,7 @@
 							<div class="icon"><span class="icon-phone"></span></div>
 							<div class="text">
 								<h3>000 (123) 456 7890</h3>
-								<p>A small river named Duden flows</p>
+								<p>Call to book a table</p>
 							</div>
 						</div>
 						<div class="col-md-4 d-flex ftco-animate">
@@ -139,10 +139,10 @@
 		<div class="one-half img" style="background-image: url(images/about.jpg);"></div>
 		<div class="one-half ftco-animate">
 			<div class="heading-section ftco-animate ">
-				<h2 class="mb-4">Welcome to <span class="flaticon-pizza">Pizza</span> A Restaurant</h2>
+				<h2 class="mb-4">Welcome to <span class="flaticon-pizza">L.M Pizzeria</span> A Restaurant</h2>
 			</div>
 			<div>
-				<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
+				<p>At our pizzeria, every slice tells a story — crafted with locally sourced ingredients, real Italian recipes, and a passion for flavor. We follow high standards to deliver delicious pizza that's fresh, authentic, and unforgettable. Taste Italy, one bite at a time.</p>
 			</div>
 		</div>
 	</section>
@@ -153,7 +153,7 @@
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
 					<h2 class="mb-4">Our Services</h2>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					<p>Want to know what services we offer, or the quality and origin of our products?</p>
 				</div>
 			</div>
 			<div class="row">
@@ -164,7 +164,7 @@
 						</div>
 						<div class="media-body">
 							<h3 class="heading">Healthy Foods</h3>
-							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+							<p>We use only the finest ingredients, carefully sourced from local producers to craft our authentic pizzas.</p>
 						</div>
 					</div>
 				</div>
@@ -175,7 +175,7 @@
 						</div>
 						<div class="media-body">
 							<h3 class="heading">Fastest Delivery</h3>
-							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+							<p>Our dedicated drivers ensure swift delivery, bringing your pizza to you at the perfect temperature: hot, fresh, and ready to enjoy.</p>
 						</div>
 					</div>
 				</div>
@@ -184,7 +184,7 @@
 						<div class="icon d-flex justify-content-center align-items-center mb-5"><span class="flaticon-pizza-1"></span></div>
 						<div class="media-body">
 							<h3 class="heading">Original Recipes</h3>
-							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+							<p>Every pizza is crafted using authentic Italian recipes, learned directly from their original masters</p>
 						</div>
 					</div>
 				</div>
@@ -196,8 +196,8 @@
 		<div class="container">
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
-					<h2 class="mb-4">Hot Pizza Meals</h2>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					<h2 class="mb-4">Signature whole pizza</h2>
+					<p>Our signature pizzas are specially crafted by blending authentic techniques learned in Italy with our own creative touch.</p>
 				</div>
 			</div>
 		</div>
