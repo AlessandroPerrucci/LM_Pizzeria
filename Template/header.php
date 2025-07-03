@@ -20,11 +20,21 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li class="nav-item"><a href="../blog.php" class="nav-link">Blog</a></li>
                     <li class="nav-item"><a href="../about.php" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="../contact.php" class="nav-link">Contact</a></li>
-                    <li class="nav-item active"><a href="../admin.php" class="nav-link">Admin</a></li>
+                    <li class="nav-item d-flex align-items-center">
+                        <?php if (isset($_SESSION['user']) && ($_SESSION['user']['gruppo'] ?? '') === 'admin'): ?>
+                            <a href="../admin.php" class="btn btn-primary mr-2">Admin</a>
+                        <?php endif; ?>
+                    </li>
                     <li class="nav-item d-flex align-items-center">
                         <?php if (isset($_SESSION['user'])): ?>
-                            <a href="../profilo.php" class="btn btn-primary mr-2">
-                                <?= htmlspecialchars($_SESSION['user']['nickname']) ?>
+                            <?php
+                            $nickname_completo = htmlspecialchars($_SESSION['user']['nickname'] ?? 'Utente');
+                            $nickname = mb_strlen($nickname_completo) > 15 ? mb_substr($nickname_completo, 0, 12) . '…' : $nickname_completo;
+                            ?>
+                            <a href="../profilo.php"
+                                class="btn btn-primary mr-2 btn-nickname"
+                                title="<?= $nickname_completo ?>">
+                                <?= $nickname ?>
                             </a>
                             <a href="../logout.php" class="btn btn-outline-light">Logout</a>
                         <?php else: ?>
@@ -73,8 +83,14 @@ if (session_status() === PHP_SESSION_NONE) {
                     </li>
                     <li class="nav-item d-flex align-items-center">
                         <?php if (isset($_SESSION['user'])): ?>
-                            <a href="profilo.php" class="btn btn-primary mr-2">
-                                <?= htmlspecialchars($_SESSION['user']['nickname']) ?>
+                            <?php
+                            $nickname_completo = htmlspecialchars($_SESSION['user']['nickname'] ?? 'Utente');
+                            $nickname = mb_strlen($nickname_completo) > 15 ? mb_substr($nickname_completo, 0, 12) . '…' : $nickname_completo;
+                            ?>
+                            <a href="profilo.php"
+                                class="btn btn-primary mr-2 btn-nickname"
+                                title="<?= $nickname_completo ?>">
+                                <?= $nickname ?>
                             </a>
                             <a href="logout.php" class="btn btn-outline-light">Logout</a>
                         <?php else: ?>
