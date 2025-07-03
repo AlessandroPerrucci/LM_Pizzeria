@@ -1,58 +1,20 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once("config.php"); // connessione al DB
 
-$errors = [];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST["email"] ?? '');
-    $nickname = trim($_POST["nickname"] ?? '');
-    $password = trim($_POST["password"] ?? '');
-    $conferma = trim($_POST["conferma"] ?? '');
-    $nome = trim($_POST["nome"] ?? '');
-    $cognome = trim($_POST["cognome"] ?? '');
+// Verifica login
+if (!isset($_SESSION['user'])) {
+    echo "Accesso negato. Effettua prima il login.";
+    exit();
+}
 
-    if ($email === '' || $nickname === '' || $password === '' || $conferma === '' || $nome === '' || $cognome === '') {
-        $errors[] = "Tutti i campi sono obbligatori.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Email non valida.";
-    } elseif ($password !== $conferma) {
-        $errors[] = "Le password non coincidono.";
-    } else {
-        $stmt = $pdo->prepare("SELECT email FROM utente WHERE email = :email");
-        $stmt->execute(['email' => $email]);
-        if ($stmt->fetch()) {
-            $errors[] = "Questa email è già registrata.";
-        } else {
-            $hashed = password_hash($password, PASSWORD_DEFAULT);
-            $insert = $pdo->prepare("
-  INSERT INTO utente (email, nickname, password, str_preferenze, nome, cognome, gruppo, foto_profilo)
-  VALUES (:email, :nickname, :password, :str_preferenze, :nome, :cognome, :gruppo, :foto_profilo)
-");
+$user = $_SESSION['user']; // contiene tutti i dati dell'utente
+$gruppo = $user['gruppo'] ?? '';
 
-            $insert->execute([
-                'email' => $email,
-                'nickname' => $nickname,
-                'password' => $hashed,
-                'str_preferenze' => -1,
-                'nome' => $nome,
-                'cognome' => $cognome,
-                'gruppo' => 'user',
-                'foto_profilo' => 'images/profilo/default.jpg'
-            ]);
-
-            // Recupera l'utente appena creato per salvarlo in sessione
-            $stmt = $pdo->prepare("SELECT * FROM utente WHERE email = :email");
-            $stmt->execute(['email' => $email]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            $_SESSION['user'] = $user;
-
-            // Reindirizza al profilo
-            header("Location: profilo.php");
-            exit;
-        }
-    }
+if ($gruppo !== 'admin') {
+    echo "Accesso riservato solo agli amministratori.";
+    exit();
 }
 ?>
 
@@ -60,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="it">
 
 <head>
-    <title>Registrazione</title>
+    <title>Admin</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -88,15 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/stile_personalizzato.css">
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
             <a class="navbar-brand" href="index.php"><span class="flaticon-pizza-1 mr-1"></span>L.M.<br><small>Pizzeria</small></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
             <div class="collapse navbar-collapse" id="ftco-nav">
@@ -107,9 +67,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <li class="nav-item"><a href="blog.php" class="nav-link">Blog</a></li>
                     <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+                    <li class="nav-item active"><a href="admin.php" class="nav-link">Admin</a></li>
                     <li class="nav-item d-flex align-items-center">
                         <?php if (isset($_SESSION['user'])): ?>
-                            <a href="profilo.php" class="btn btn-primary mr-2"><?= htmlspecialchars($_SESSION['user']['nickname']) ?></a>
+                            <a href="profilo.php" class="btn btn-primary mr-2">
+                                <?= htmlspecialchars($_SESSION['user']['nickname']) ?>
+                            </a>
                             <a href="logout.php" class="btn btn-outline-light">Logout</a>
                         <?php else: ?>
                             <a href="login.php" class="btn btn-primary">Login</a>
@@ -119,73 +82,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </nav>
-
-    <div class="container mt-5">
-        <div class="form-profilo">
-            <h2 class="text-center mb-4" style="color: #212529;">Crea un nuovo account</h2>
-
-            <?php if (!empty($errors)): ?>
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        <?php foreach ($errors as $e): ?><li><?= htmlspecialchars($e) ?></li><?php endforeach; ?>
-                    </ul>
+    <!-- Sezione Hero Header -->
+    <section class="slider-item" style="background-image: url('../images/bg_3.jpg'); min-height: 400px;">
+        <div class="overlay" style=" position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="row justify-content-center align-items-center" style="min-height: 400px;">
+                <div class="col-md-8 text-center slider-text" style="color: white;">
+                    <h1 class="mb-3">Benvenuto, <?= htmlspecialchars($user['nome'] ?? 'Admin') ?></h1>
+                    <p class="breadcrumbs"><a href="../index.php" style="color: #ccc;">Home</a> <span class="mx-2">&gt;</span> <span>Admin</span></p>
                 </div>
-            <?php endif; ?>
-
-            <form method="post">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" id="email" class="form-control"
-                        value="<?= isset($email) ? htmlspecialchars($email) : '' ?>" required
-                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
-                </div>
-
-                <div class="mb-3">
-                    <label for="nickname" class="form-label">Nickname</label>
-                    <input type="text" name="nickname" id="nickname" class="form-control"
-                        value="<?= isset($nickname) ? htmlspecialchars($nickname) : '' ?>" required
-                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
-                </div>
-
-                <div class="mb-3">
-                    <label for="nome" class="form-label">Nome</label>
-                    <input type="text" name="nome" id="nome" class="form-control"
-                        value="<?= isset($nome) ? htmlspecialchars($nome) : '' ?>" required
-                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
-                </div>
-
-                <div class="mb-3">
-                    <label for="cognome" class="form-label">Cognome</label>
-                    <input type="text" name="cognome" id="cognome" class="form-control"
-                        value="<?= isset($cognome) ? htmlspecialchars($cognome) : '' ?>" required
-                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
-                </div>
-
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" name="password" id="password" class="form-control" required
-                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
-                </div>
-
-                <div class="mb-3">
-                    <label for="conferma" class="form-label">Conferma Password</label>
-                    <input type="password" name="conferma" id="conferma" class="form-control" required
-                        style="color: #212529 !important; background-color: #fff; border:1px solid !important;">
-                </div>
-
-                <button type="submit" class="btn-custom-warning" style="cursor: pointer !important;">Registrati</button>
-            </form>
-
-            <div class="text-center mt-3">
-                <a href="login.php" class="btn btn-outline-secondary">Hai già un account? Accedi</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
 
-    <footer class="ftco-footer ftco-section img" style="margin-top: 8% !important;">
+    <!-- Sezione Contenuto Admin -->
+    <section class="ftco-section">
+        <div class="container mt-5">
+            <!-- Titolo Sezione e introduzione -->
+            <div class="row justify-content-center mb-5 pb-3">
+                <div class="col-md-7 heading-section ftco-animate text-center">
+                    <h2 class="mb-4">Pannello di Amministrazione</h2>
+                    <p>Seleziona un'operazione da eseguire.</p>
+                </div>
+            </div>
+            <!-- Griglia di azioni admin -->
+            <div class="row">
+                <!-- Colonna 1: Gestione Pizze -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="flaticon-pizza-1"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Pizze</h3>
+                            <p style="color:#fff;">Aggiungi, modifica o rimuovi le pizze dal menu.</p>
+                            <p><a href="admin/modifica_pizze.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Colonna 2: Gestione Ingredienti -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="flaticon-diet"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Ingredienti</h3>
+                            <p style="color:#fff;">Gestisci gli ingredienti disponibili per le pizze.</p>
+                            <p><a href="admin/modifica_ingredienti.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Colonna 3: Gestione Utenti -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="icon-person"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Utenti</h3>
+                            <p style="color:#fff;">Visualizza la lista degli utenti e modificane i ruoli.</p>
+                            <p><a href="admin/modifica_utenti.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="ftco-footer ftco-section img">
         <div class="overlay"></div>
         <div class="container">
             <div class="row mb-5">
@@ -264,7 +229,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </footer>
 </body>
-
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-migrate-3.0.1.min.js"></script>
 <script src="js/popper.min.js"></script>
@@ -275,12 +239,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/jquery.magnific-popup.min.js"></script>
 <script src="js/aos.js"></script>
-<script src="js/jquery.animateNumber.min.js"></script>
-<script src="js/bootstrap-datepicker.js"></script>
-<script src="js/jquery.timepicker.min.js"></script>
 <script src="js/scrollax.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-<script src="js/google-map.js"></script>
 <script src="js/main.js"></script>
+
 
 </html>
