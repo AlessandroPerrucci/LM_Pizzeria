@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Lug 03, 2025 alle 18:31
+-- Creato il: Lug 04, 2025 alle 23:46
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -177,7 +177,7 @@ CREATE TABLE `pizza` (
   `descrizione` varchar(1000) DEFAULT 'inserire descrizione',
   `prezzo` decimal(8,2) UNSIGNED NOT NULL DEFAULT 0.00,
   `disponibile` tinyint(1) DEFAULT 0,
-  `tempo_cottura` time DEFAULT NULL
+  `tempo_cottura` int(10) UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -331,7 +331,9 @@ INSERT INTO `utente` (`email`, `password`, `nickname`, `nome`, `cognome`, `foto_
 ('prova1@gmail.com', '$2y$10$vupesn2Gu1nPVfvWA8Hsu.xBQOHi8GCKfd4qTTg9kxXBxCT..sOjC', 'prova', 'default', 'default', NULL, 'inserisci una bio', NULL, -1, 'user', NULL),
 ('prova2@gmail.com', '$2y$10$LDNXR9W36sk0PtNqruOVueODbHIKAqHJKl2dDCqOT0YQNFCxA8SG.', 'prova', 'default', 'default', NULL, 'inserisci una bio', NULL, -1, 'user', NULL),
 ('prova3@gmail.com', '$2y$10$W50Rcl4UGHiWf8NQlo/kjemfo/KGKZMQU7KhJkDiElpLgWbfoapuq', 'prova3', 'default', 'default', 'images/profilo/default.jpg', 'inserisci una bio', NULL, -1, 'user', NULL),
-('prova4@gmail.com', '$2y$10$cU4iKP4XeSqTaPRJcAbhie6irKi5X.HLTGADF793OofRcfa1i5JM.', 'leocot', 'Cotugno', 'Leonardo', 'images/profilo/default.jpg', 'inserisci una bio', NULL, -1, 'user', NULL);
+('prova4@gmail.com', '$2y$10$cU4iKP4XeSqTaPRJcAbhie6irKi5X.HLTGADF793OofRcfa1i5JM.', 'leocot', 'Cotugno', 'Leonardo', 'images/profilo/default.jpg', 'inserisci una bio', NULL, -1, 'user', NULL),
+('a@gmail.com', '$2y$10$DIzVywSB9aUPf2KSinY2cOf44aPp32bNl4anqt3W1Q7rxh2wcPi..', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'a', 'images/profilo/default.jpg', 'inserisci una bio', NULL, -1, 'user', NULL),
+('aaaaaaaaaaaaaaaaaa@gmail.com', '$2y$10$oGpn15CRNlYH58K0AgFEuup0mJianvQgevRSTHD6CnpI87j5ba0VK', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'a', 'a', 'images/profilo/default.jpg', 'inserisci una bio', NULL, -1, 'user', NULL);
 
 --
 -- Indici per le tabelle scaricate

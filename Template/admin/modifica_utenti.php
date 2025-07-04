@@ -38,8 +38,6 @@ try {
 <html lang="it">
 
 <head>
-
-
     <title>Modifica Utenti</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -108,14 +106,14 @@ try {
 
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <div class="card p-4 shadow rounded" style="background-color: black !important;">
+                    <div class="card p-4 shadow rounded" style="background-color: #343a40 !important;">
 
                         <form method="POST">
                             <div class="form-group">
                                 <label for="email_utente">
                                     <h4>Utente</h4>
                                 </label>
-                                <select name="email_utente" class="form-control" style="color:white !important; background:black !important;border: 1px solid #ccc !important;" required>
+                                <select name="email_utente" class="form-control" style="color:white !important; background:#343a40 !important;border: 1px solid #ccc !important;" required>
                                     <?php foreach ($utenti as $u): ?>
                                         <option value="<?= htmlspecialchars($u['email']) ?>">
                                             <?= htmlspecialchars($u['email']) ?> (<?= $u['gruppo'] ?>)
@@ -128,7 +126,7 @@ try {
                                 <label for="nuovo_gruppo">
                                     <h4>Nuovo Gruppo</h4>
                                 </label>
-                                <select name="nuovo_gruppo" class="form-control" style="color:white !important; background:black !important;border: 1px solid #ccc !important;" required>
+                                <select name="nuovo_gruppo" class="form-control" style="color:white !important; background:#343a40 !important;border: 1px solid #ccc !important;" required>
                                     <?php foreach ($gruppi as $gr): ?>
                                         <option value="<?= htmlspecialchars($gr['nome']) ?>">
                                             <?= htmlspecialchars($gr['nome']) ?>
@@ -157,5 +155,16 @@ try {
 	<?php include '../footer.php'; ?>
     
 </body>
-
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery-migrate-3.0.1.min.js"></script>
+<script src="../js/popper.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/jquery.waypoints.min.js"></script>
+<script src="../js/jquery.stellar.min.js"></script>
+<script src="../js/owl.carousel.min.js"></script>
+<script src="../js/jquery.magnific-popup.min.js"></script>
+<script src="../js/aos.js"></script>
+<script src="../js/scrollax.min.js"></script>
+<script src="../js/main.js"></script>
 </html>
