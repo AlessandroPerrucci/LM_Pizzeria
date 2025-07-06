@@ -171,6 +171,9 @@ $ingredienti = $stmt->fetchAll();
                             </form>
                         </tr>
                         <?php endforeach; ?>
+                        <?php if (empty($bevande)): ?>
+                            <tr><td colspan="7" class="text-center text-muted" style="color:white !important;">Nessun ingrediente presente.</td></tr>
+                            <?php endif; ?>
                     </tbody>
                 </table>
             </div>

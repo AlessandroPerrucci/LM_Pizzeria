@@ -157,7 +157,7 @@ function getIngredientiPizza($pdo, $nome_pizza)
                         <span class="mx-2 text-white">&gt;</span>
                         <a href="../admin.php" class="text-white">Admin</a>
                         <span class="mx-2 text-white">&gt;</span>
-                        <span>Ingredienti</span>
+                        <span>Pizze</span>
                     </p>
                 </div>
             </div>
@@ -271,6 +271,9 @@ function getIngredientiPizza($pdo, $nome_pizza)
                                     </form>
                                 </tr>
                             <?php endforeach; ?>
+                            <?php if (empty($bevande)): ?>
+                            <tr><td colspan="7" class="text-center text-muted" style="color:white !important;">Nessuna pizza presente.</td></tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
