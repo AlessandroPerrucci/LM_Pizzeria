@@ -179,20 +179,20 @@ function getIngredientiPizza($pdo, $nome_pizza)
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label>Nome</label>
-                                    <input type="text" name="nome" class="form-control" required>
+                                    <input autocomplete="off" type="text" name="nome" class="form-control" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Prezzo (€)</label>
-                                    <input type="number" step="0.01" name="prezzo" class="form-control" required>
+                                    <input autocomplete="off"  type="number" step="0.01" name="prezzo" class="form-control" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Tempo Cottura (min)</label>
-                                    <input type="number" name="tempo_cottura" class="form-control" required>
+                                    <input autocomplete="off" type="number" name="tempo_cottura" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Descrizione</label>
-                                <textarea name="descrizione" class="form-control"></textarea>
+                                <textarea autocomplete="off" name="descrizione" class="form-control"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Ingredienti</label><br>
@@ -235,13 +235,13 @@ function getIngredientiPizza($pdo, $nome_pizza)
                             ?>
                                 <tr>
                                     <form method="POST">
-                                        <td><input type="text" name="nome" class="form-control-plaintext text-white" value="<?= htmlspecialchars($pizza['nome']) ?>" readonly></td>
-                                        <td><textarea name="descrizione" class="form-control"><?= htmlspecialchars($pizza['descrizione']) ?></textarea></td>
-                                        <td><input type="number" step="0.01" name="prezzo" class="form-control" value="<?= $pizza['prezzo'] ?>"></td>
+                                        <td><input  autocomplete="off" type="text" name="nome" class="form-control-plaintext text-white" value="<?= htmlspecialchars($pizza['nome']) ?>" readonly></td>
+                                        <td><textarea  autocomplete="off" name="descrizione" class="form-control"><?= htmlspecialchars($pizza['descrizione']) ?></textarea></td>
+                                        <td><input  autocomplete="off" type="number" step="0.01" name="prezzo" class="form-control" value="<?= $pizza['prezzo'] ?>"></td>
                                         <td>
-                                            <input type="checkbox" name="disponibile" <?= $pizza['disponibile'] ? 'checked' : '' ?>>
+                                            <input  autocomplete="off" type="checkbox" name="disponibile" <?= $pizza['disponibile'] ? 'checked' : '' ?>>
                                         </td>
-                                        <td><input type="number" name="tempo_cottura" class="form-control" value="<?= $pizza['tempo_cottura'] ?>"></td>
+                                        <td><input  autocomplete="off" type="number" name="tempo_cottura" class="form-control" value="<?= $pizza['tempo_cottura'] ?>"></td>
                                         <td class="position-relative">
                                             <div class="dropdown">
                                                 <span class="btn btn-secondary dropdown-toggle" onmouseover="this.click();" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -271,7 +271,7 @@ function getIngredientiPizza($pdo, $nome_pizza)
                                     </form>
                                 </tr>
                             <?php endforeach; ?>
-                            <?php if (empty($bevande)): ?>
+                            <?php if (empty($pizza)): ?>
                             <tr><td colspan="7" class="text-center text-muted" style="color:white !important;">Nessuna pizza presente.</td></tr>
                             <?php endif; ?>
                         </tbody>

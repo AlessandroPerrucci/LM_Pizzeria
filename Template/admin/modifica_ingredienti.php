@@ -67,6 +67,7 @@ $ingredienti = $stmt->fetchAll();
 
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <title>Gestione Ingredienti</title>
     <meta charset="utf-8">
@@ -93,113 +94,115 @@ $ingredienti = $stmt->fetchAll();
 </head>
 
 <body>
-<?php $pagina_attiva = 'onedirup'; ?>
-<?php include '../header.php'; ?>
+    <?php $pagina_attiva = 'onedirup'; ?>
+    <?php include '../header.php'; ?>
 
-<!-- HERO SECTION -->
-<section class="slider-item" style="background-image: url('../images/bg_3.jpg'); min-height: 300px; position: relative;">
-    <div class="overlay" style="background: rgba(0,0,0,0.5); position:absolute; top:0; left:0; right:0; bottom:0;"></div>
-    <div class="container" style="position: relative; z-index: 2;">
-        <div class="row justify-content-center align-items-center" style="min-height: 300px;">
-            <div class="col-md-8 text-center text-white">
-                <h1 class="mb-3">Gestione Ingredienti</h1>
-                <p class="breadcrumbs">
-                    <a href="../index.php" class="text-white">Home</a>
-                    <span class="mx-2 text-white">&gt;</span>
-                    <a href="../admin.php" class="text-white">Admin</a>
-                    <span class="mx-2 text-white">&gt;</span>
-                    <span>Ingredienti</span>
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CONTENUTO -->
-<section class="ftco-section">
-    <div class="container">
-        <?php if (!empty($flash)): ?>
-    <div class="alert alert-info text-center"><?= htmlspecialchars($flash) ?></div>
-<?php endif; ?>
-
-        <!-- FORM AGGIUNTA -->
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-8">
-                <div class="card p-4 shadow bg-dark text-white" style="background-color: gray-dark !important;">
-                    <h4 class="mb-3">Aggiungi Nuovo Ingrediente</h4>
-                    <form method="POST">
-                        <div class="form-group">
-                            <label for="nome">Nome</label>
-                            <input type="text" name="nome" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="descrizione">Descrizione</label>
-                            <textarea name="descrizione" class="form-control" rows="2"></textarea>
-                        </div>
-                        <button type="submit" name="add" class="btn btn-primary">Aggiungi</button>
-                    </form>
+    <!-- HERO SECTION -->
+    <section class="slider-item" style="background-image: url('../images/bg_3.jpg'); min-height: 300px; position: relative;">
+        <div class="overlay" style="background: rgba(0,0,0,0.5); position:absolute; top:0; left:0; right:0; bottom:0;"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="row justify-content-center align-items-center" style="min-height: 300px;">
+                <div class="col-md-8 text-center text-white">
+                    <h1 class="mb-3">Gestione Ingredienti</h1>
+                    <p class="breadcrumbs">
+                        <a href="../index.php" class="text-white">Home</a>
+                        <span class="mx-2 text-white">&gt;</span>
+                        <a href="../admin.php" class="text-white">Admin</a>
+                        <span class="mx-2 text-white">&gt;</span>
+                        <span>Ingredienti</span>
+                    </p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- TABELLA -->
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <h3 class="text-white mb-3">Lista Ingredienti</h3>
-                <table class="table table-dark table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Descrizione</th>
-                            <th>Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($ingredienti as $row): ?>
-                        <tr>
-                            <form method="POST">
-                                <td>
-                                    <input type="text" name="nome" value="<?= htmlspecialchars($row['nome']) ?>" class="form-control-plaintext text-white" readonly>
-                                </td>
-                                <td>
-                                    <textarea name="descrizione" class="form-control"><?= htmlspecialchars($row['descrizione']) ?></textarea>
-                                </td>
-                                <td>
-                                    <button type="submit" name="update" class="btn btn-success btn-sm">Salva</button>
-                                    <a href="?delete=<?= urlencode($row['nome']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Eliminare questo ingrediente?');">Elimina</a>
-                                </td>
-                            </form>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php if (empty($bevande)): ?>
-                            <tr><td colspan="7" class="text-center text-muted" style="color:white !important;">Nessun ingrediente presente.</td></tr>
+    <!-- CONTENUTO -->
+    <section class="ftco-section">
+        <div class="container">
+            <?php if (!empty($flash)): ?>
+                <div class="alert alert-info text-center"><?= htmlspecialchars($flash) ?></div>
+            <?php endif; ?>
+
+            <!-- FORM AGGIUNTA -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8">
+                    <div class="card p-4 shadow bg-dark text-white" style="background-color: gray-dark !important;">
+                        <h4 class="mb-3">Aggiungi Nuovo Ingrediente</h4>
+                        <form method="POST">
+                            <div class="form-group">
+                                <label for="nome">Nome</label>
+                                <input  autocomplete="off" type="text" name="nome" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="descrizione">Descrizione</label>
+                                <textarea  autocomplete="off" name="descrizione" class="form-control" rows="2"></textarea>
+                            </div>
+                            <button type="submit" name="add" class="btn btn-primary">Aggiungi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELLA -->
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <h3 class="text-white mb-3">Lista Ingredienti</h3>
+                    <table class="table table-bordered bg-white" style="background-color: #343a40 !important; color:white !important;">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrizione</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($ingredienti as $row): ?>
+                                <tr>
+                                    <form method="POST">
+                                        <td>
+                                            <input  type="text" name="nome" value="<?= htmlspecialchars($row['nome']) ?>" class="form-control-plaintext text-white" readonly>
+                                        </td>
+                                        <td>
+                                            <textarea  autocomplete="off" name="descrizione" class="form-control"><?= htmlspecialchars($row['descrizione']) ?></textarea>
+                                        </td>
+                                        <td>
+                                            <button type="submit" name="update" class="btn btn-success btn-sm">Salva</button>
+                                            <a href="?delete=<?= urlencode($row['nome']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Eliminare questo ingrediente?');">Elimina</a>
+                                        </td>
+                                    </form>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php if (empty($ingredienti)): ?>
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted" style="color:white !important;">Nessun ingrediente presente.</td>
+                                </tr>
                             <?php endif; ?>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-4 text-center">
+                    <a href="../admin.php" class="btn btn-primary">Torna al Pannello Admin</a>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-4 text-center">
-                <a href="../admin.php" class="btn btn-primary">Torna al Pannello Admin</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<?php include '../footer.php'; ?>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/jquery-migrate-3.0.1.min.js"></script>
-<script src="../js/popper.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/jquery.easing.1.3.js"></script>
-<script src="../js/jquery.waypoints.min.js"></script>
-<script src="../js/jquery.stellar.min.js"></script>
-<script src="../js/owl.carousel.min.js"></script>
-<script src="../js/jquery.magnific-popup.min.js"></script>
-<script src="../js/aos.js"></script>
-<script src="../js/scrollax.min.js"></script>
-<script src="../js/main.js"></script>
+    <?php include '../footer.php'; ?>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.easing.1.3.js"></script>
+    <script src="../js/jquery.waypoints.min.js"></script>
+    <script src="../js/jquery.stellar.min.js"></script>
+    <script src="../js/owl.carousel.min.js"></script>
+    <script src="../js/jquery.magnific-popup.min.js"></script>
+    <script src="../js/aos.js"></script>
+    <script src="../js/scrollax.min.js"></script>
+    <script src="../js/main.js"></script>
 </body>
-</html>
 
+</html>

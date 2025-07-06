@@ -132,23 +132,23 @@ $bevande = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="hidden" name="azione" value="aggiungi">
                         <div class="form-group">
                             <label style="color: white;">Nome</label>
-                            <input type="text" name="nome" class="form-control" required>
+                            <input autocomplete="off" type="text" name="nome" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label style="color: white;">Centilitri</label>
-                            <input type="number" step="1" name="centilitri" class="form-control" required>
+                            <input autocomplete="off" type="number" step="1" name="centilitri" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label style="color: white;">Descrizione</label>
-                            <input type="text" name="descrizione" class="form-control" required>
+                            <input autocomplete="off" type="text" name="descrizione" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label style="color: white;">Tipologia</label>
-                            <input type="text" name="tipologia" class="form-control" required>
+                            <input autocomplete="off" type="text" name="tipologia" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label style="color: white;">Prezzo (€)</label>
-                            <input type="number" step="0.01" name="prezzo" class="form-control" required>
+                            <input autocomplete="off" type="number" step="0.01" name="prezzo" class="form-control" required>
                         </div>
                         <div class="form-group form-check">
                             <input type="checkbox" name="disponibile" class="form-check-input" checked>
@@ -165,7 +165,7 @@ $bevande = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-12">
                 <h4 class="mb-3">Lista Bevande</h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped bg-white" style="background-color: #343a40 !important; color:white !important;">
+                    <table class="table table-bordered bg-white" style="background-color: #343a40 !important; color:white !important;">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Nome</th>
@@ -181,13 +181,13 @@ $bevande = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php foreach ($bevande as $bevanda): ?>
                             <tr>
                                 <form method="POST" class="form-inline">
-                                    <input type="hidden" name="azione" value="modifica">
-                                    <input type="hidden" name="nome" value="<?= htmlspecialchars($bevanda['nome']) ?>">
-                                    <td><?= htmlspecialchars($bevanda['nome']) ?></td>
-                                    <td><input type="number" name="centilitri" step="0.01" value="<?= $bevanda['centilitri'] ?>" class="form-control form-control-sm"></td>
-                                    <td><input type="text" name="descrizione" value="<?= htmlspecialchars($bevanda['descrizione']) ?>" class="form-control form-control-sm"></td>
-                                    <td><input type="text" name="tipologia" value="<?= htmlspecialchars($bevanda['tipologia']) ?>" class="form-control form-control-sm"></td>
-                                    <td><input type="number" name="prezzo" step="0.01" value="<?= $bevanda['prezzo'] ?>" class="form-control form-control-sm"></td>
+                                    <input autocomplete="off" type="hidden" name="azione" value="modifica">
+                                    <input autocomplete="off" type="hidden" name="nome" value="<?= htmlspecialchars($bevanda['nome']) ?>">
+                                    <td><input type="text" name="nome" value="<?= htmlspecialchars($bevanda['nome']) ?>" class="form-control-plaintext text-white" readonly></td>
+                                    <td><input autocomplete="off" type="number" name="centilitri" step="0.01" value="<?= $bevanda['centilitri'] ?>" class="form-control form-control-sm"></td>
+                                    <td><input autocomplete="off" type="text" name="descrizione" value="<?= htmlspecialchars($bevanda['descrizione']) ?>" class="form-control form-control-sm"></td>
+                                    <td><input autocomplete="off" type="text" name="tipologia" value="<?= htmlspecialchars($bevanda['tipologia']) ?>" class="form-control form-control-sm"></td>
+                                    <td><input autocomplete="off" type="number" name="prezzo" step="0.01" value="<?= $bevanda['prezzo'] ?>" class="form-control form-control-sm"></td>
                                     <td><input type="checkbox" name="disponibile" <?= $bevanda['disponibile'] ? 'checked' : '' ?>></td>
                                     <td>
                                         <button type="submit" class="btn btn-sm btn-success">Salva</button>

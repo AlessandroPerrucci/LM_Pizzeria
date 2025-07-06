@@ -121,18 +121,18 @@ $secondi = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="p-4 p-md-5 rounded bg-dark text-white">
                         <h4>Aggiungi nuovo secondo</h4>
                         <form method="POST">
-                            <input type="hidden" name="azione" value="aggiungi">
+                            <input autocomplete="off" type="hidden" name="azione" value="aggiungi">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input type="text" name="nome" class="form-control" required>
+                                <input autocomplete="off" type="text" name="nome" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Descrizione</label>
-                                <input type="text" name="descrizione" class="form-control" required>
+                                <input autocomplete="off" type="text" name="descrizione" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Prezzo</label>
-                                <input type="number" name="prezzo" step="0.01" class="form-control" required>
+                                <input autocomplete="off" type="number" name="prezzo" step="0.01" class="form-control" required>
                             </div>
                             <div class="form-check">
                                 <input type="checkbox" name="disponibile" class="form-check-input" checked>
@@ -164,10 +164,10 @@ $secondi = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form method="POST" class="form-inline">
                 <input type="hidden" name="azione" value="modifica">
                 <input type="hidden" name="nome" value="<?= htmlspecialchars($secondo['nome']) ?>">
-                <td><?= htmlspecialchars($secondo['nome']) ?></td>
-                <td><input type="text" name="descrizione" value="<?= htmlspecialchars($secondo['descrizione']) ?>" class="form-control form-control-sm"></td>
-                <td><input type="number" name="prezzo" step="0.01" value="<?= $secondo['prezzo'] ?>" class="form-control form-control-sm"></td>
-                <td><input type="checkbox" name="disponibile" <?= $secondo['disponibile'] ? 'checked' : '' ?>></td>
+                <td><input autocomplete="off" type="text" name="nome" value="<?= htmlspecialchars($secondo['nome']) ?>" class="form-control-plaintext text-white" readonly></td>
+                <td><input autocomplete="off" type="text" name="descrizione" value="<?= htmlspecialchars($secondo['descrizione']) ?>" class="form-control form-control-sm"></td>
+                <td><input autocomplete="off" type="number" name="prezzo" step="0.01" value="<?= $secondo['prezzo'] ?>" class="form-control form-control-sm"></td>
+                <td><input autocomplete="off" type="checkbox" name="disponibile" <?= $secondo['disponibile'] ? 'checked' : '' ?>></td>
                 <td>
                     <button type="submit" class="btn btn-sm btn-success">Salva</button>
             </form>

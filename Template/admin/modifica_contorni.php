@@ -5,67 +5,67 @@ require_once("../config.php");
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
-// Verifica accesso admin
+// Accesso solo per admin
 if (!isset($_SESSION['user']) || ($_SESSION['user']['gruppo'] ?? '') !== 'admin') {
     echo "Accesso riservato solo agli amministratori.";
     exit();
 }
 
-// Aggiunta
+// Aggiunta contorno
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['azione'] === 'aggiungi') {
     try {
-        $stmt = $pdo->prepare("INSERT INTO antipasto (nome, descrizione, prezzo, disponibile) VALUES (:nome, :descrizione, :prezzo, :disponibile)");
+        $stmt = $pdo->prepare("INSERT INTO contorno (nome, descrizione, prezzo, disponibile) VALUES (:nome, :descrizione, :prezzo, :disponibile)");
         $stmt->execute([
             'nome' => $_POST['nome'],
             'descrizione' => $_POST['descrizione'],
             'prezzo' => $_POST['prezzo'],
             'disponibile' => isset($_POST['disponibile']) ? 1 : 0
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'testo' => 'Antipasto aggiunto con successo.'];
+        $_SESSION['flash'] = ['tipo' => 'success', 'testo' => 'Contorno aggiunto con successo.'];
     } catch (PDOException $e) {
         if ($e->getCode() == 23000) {
-            $_SESSION['flash'] = ['tipo' => 'danger', 'testo' => 'Errore: esiste già un antipasto con questo nome.'];
+            $_SESSION['flash'] = ['tipo' => 'danger', 'testo' => 'Errore: esiste già un contorno con questo nome.'];
         } else {
             $_SESSION['flash'] = ['tipo' => 'danger', 'testo' => 'Errore imprevisto: ' . $e->getMessage()];
         }
     }
-    header("Location: modifica_antipasti.php");
+    header("Location: modifica_contorni.php");
     exit();
 }
 
 // Eliminazione
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['azione'] === 'elimina') {
-    $stmt = $pdo->prepare("DELETE FROM antipasto WHERE nome = :nome");
+    $stmt = $pdo->prepare("DELETE FROM contorno WHERE nome = :nome");
     $stmt->execute(['nome' => $_POST['nome']]);
-    $_SESSION['flash'] = ['tipo' => 'warning', 'testo' => 'Antipasto eliminato.'];
-    header("Location: modifica_antipasti.php");
+    $_SESSION['flash'] = ['tipo' => 'warning', 'testo' => 'Contorno eliminato.'];
+    header("Location: modifica_contorni.php");
     exit();
 }
 
 // Modifica
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['azione'] === 'modifica') {
-    $stmt = $pdo->prepare("UPDATE antipasto SET descrizione = :descrizione, prezzo = :prezzo, disponibile = :disponibile WHERE nome = :nome");
+    $stmt = $pdo->prepare("UPDATE contorno SET descrizione = :descrizione, prezzo = :prezzo, disponibile = :disponibile WHERE nome = :nome");
     $stmt->execute([
         'nome' => $_POST['nome'],
         'descrizione' => $_POST['descrizione'],
         'prezzo' => $_POST['prezzo'],
         'disponibile' => isset($_POST['disponibile']) ? 1 : 0
     ]);
-    $_SESSION['flash'] = ['tipo' => 'success', 'testo' => 'Antipasto modificato con successo.'];
-    header("Location: modifica_antipasti.php");
+    $_SESSION['flash'] = ['tipo' => 'success', 'testo' => 'Contorno modificato con successo.'];
+    header("Location: modifica_contorni.php");
     exit();
 }
 
 // Lettura
-$stmt = $pdo->query("SELECT * FROM antipasto ORDER BY nome ASC");
-$antipasti = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $pdo->query("SELECT * FROM contorno ORDER BY nome ASC");
+$contorni = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="it">
 
 <head>
-    <title>Gestione Antipasti</title>
+    <title>Gestione Contorni</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -98,18 +98,19 @@ $antipasti = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="container" style="position: relative; z-index: 2;">
             <div class="row justify-content-center align-items-center" style="min-height: 300px;">
                 <div class="col-md-8 text-center text-white">
-                    <h1 class="mb-3">Gestione Antipasti</h1>
+                    <h1 class="mb-3">Gestione Contorni</h1>
                     <p class="breadcrumbs">
                         <a href="../index.php" class="text-white">Home</a>
                         <span class="mx-2 text-white">&gt;</span>
                         <a href="../admin.php" class="text-white">Admin</a>
                         <span class="mx-2 text-white">&gt;</span>
-                        <span>Antipasti</span>
+                        <span>Contorni</span>
                     </p>
                 </div>
             </div>
         </div>
     </section>
+
     <section class="ftco-section">
         <div class="container">
 
@@ -123,6 +124,7 @@ $antipasti = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="row justify-content-center mb-5">
                 <div class="col-md-8">
                     <div class="bg-dark p-4 rounded">
+                        <h4>Aggiungi nuovo contorno</h4>
                         <form method="POST">
                             <input type="hidden" name="azione" value="aggiungi">
                             <div class="form-group">
@@ -131,7 +133,7 @@ $antipasti = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="form-group">
                                 <label style="color:white;">Descrizione</label>
-                                <input  autocomplete="off" type="text" name="descrizione" class="form-control" required>
+                                <input autocomplete="off" type="text" name="descrizione" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label style="color:white;">Prezzo (€)</label>
@@ -141,7 +143,7 @@ $antipasti = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <input type="checkbox" name="disponibile" class="form-check-input" checked>
                                 <label class="form-check-label" style="color:white;">Disponibile</label>
                             </div>
-                            <button type="submit" class="btn btn-primary">Aggiungi Antipasto</button>
+                            <button type="submit" class="btn btn-primary">Aggiungi Contorno</button>
                         </form>
                     </div>
                 </div>
@@ -161,29 +163,29 @@ $antipasti = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($antipasti as $antipasto): ?>
+                            <?php foreach ($contorni as $contorno): ?>
                                 <tr>
                                     <form method="POST" class="form-inline">
                                         <input type="hidden" name="azione" value="modifica">
-                                        <input type="hidden" name="nome" value="<?= htmlspecialchars($antipasto['nome']) ?>">
-                                        <td><input autocomplete="off" type="text" name="nome" value="<?= htmlspecialchars($antipasto['nome']) ?>" class="form-control-plaintext text-white" readonly></td>
-                                        <td><input autocomplete="off" type="text" name="descrizione" value="<?= htmlspecialchars($antipasto['descrizione']) ?>" class="form-control form-control-sm"></td>
-                                        <td><input autocomplete="off" type="number" name="prezzo" step="0.01" value="<?= $antipasto['prezzo'] ?>" class="form-control form-control-sm"></td>
-                                        <td><input type="checkbox" name="disponibile" <?= $antipasto['disponibile'] ? 'checked' : '' ?>></td>
+                                        <input type="hidden" name="nome" value="<?= htmlspecialchars($contorno['nome']) ?>">
+                                        <td><input autocomplete="off" type="text" name="nome" value="<?= htmlspecialchars($contorno['nome']) ?>" class="form-control-plaintext text-white" readonly></td>
+                                        <td><input autocomplete="off" type="text" name="descrizione" value="<?= htmlspecialchars($contorno['descrizione']) ?>" class="form-control form-control-sm"></td>
+                                        <td><input autocomplete="off" type="number" name="prezzo" step="0.01" value="<?= $contorno['prezzo'] ?>" class="form-control form-control-sm"></td>
+                                        <td><input type="checkbox" name="disponibile" <?= $contorno['disponibile'] ? 'checked' : '' ?>></td>
                                         <td>
                                             <button type="submit" class="btn btn-sm btn-success">Salva</button>
                                     </form>
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="azione" value="elimina">
-                                        <input type="hidden" name="nome" value="<?= htmlspecialchars($antipasto['nome']) ?>">
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Eliminare l\'antipasto?')">Elimina</button>
+                                        <input type="hidden" name="nome" value="<?= htmlspecialchars($contorno['nome']) ?>">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Eliminare il contorno?')">Elimina</button>
                                     </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                            <?php if (empty($antipasti)): ?>
+                            <?php if (empty($contorni)): ?>
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted" style="color:white !important;">Nessun antipasto presente.</td>
+                                    <td colspan="5" class="text-center text-muted" style="color:white !important;">Nessun contorno presente.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>

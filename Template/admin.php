@@ -120,7 +120,7 @@ if ($gruppo !== 'admin') {
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </section>
@@ -133,7 +133,7 @@ if ($gruppo !== 'admin') {
                 <div class="col-md-4 ftco-animate">
                     <div class="media d-block text-center block-6 services">
                         <div class="icon d-flex justify-content-center align-items-center mb-5">
-                            <span class="flaticon-diet"></span>
+                            <span class="flaticon-chef"></span>
                         </div>
                         <div class="media-body">
                             <h3 class="heading" style="color:#fff;">Gestione Antipasti</h3>
@@ -159,7 +159,7 @@ if ($gruppo !== 'admin') {
                 <div class="col-md-4 ftco-animate">
                     <div class="media d-block text-center block-6 services">
                         <div class="icon d-flex justify-content-center align-items-center mb-5">
-                            <span class="flaticon-laugh"></span>
+                            <span class="flaticon-diet"></span>
                         </div>
                         <div class="media-body">
                             <h3 class="heading" style="color:#fff;">Gestione Bevande</h3>
@@ -168,12 +168,86 @@ if ($gruppo !== 'admin') {
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </section>
 
-    
+    <section class="ftco-section">
+        <div class="container mt-5">
+            <!-- Griglia di azioni admin -->
+            <div class="row">
+                <!-- Colonna 1: Gestione Pizze -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="flaticon-chef"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Contorni</h3>
+                            <p style="color:#fff;">Aggiungi, modifica o rimuovi i contorni dal menu.</p>
+                            <p><a href="admin/modifica_contorni.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colonna 2 -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="icon-person"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Prenotazioni</h3>
+                            <p style="color:#fff;">Aggiungi, modifica o rimuovi le prenotazioni</p>
+                            <p><a href="admin/modifica_prenotazioni.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colonna 3 -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="icon-person"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Gruppi</h3>
+                            <p style="color:#fff;">Aggiungi, modifica o rimuovi le impostazioni sui gruppi</p>
+                            <p><a href="admin/modifica_gruppi.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="ftco-section">
+        <div class="container mt-5">
+            <!-- Griglia di azioni admin -->
+            <div class="row">
+                <!-- Colonna 1: Gestione Pizze -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="icon-person"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Privilegi</h3>
+                            <p style="color:#fff;">Aggiungi, modifica o rimuovi i privilegi.</p>
+                            <p><a href="admin/modifica_privilegi.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+
     <?php include 'footer.php'; ?>
 </body>
 <script src="js/jquery.min.js"></script>
