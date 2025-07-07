@@ -20,6 +20,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li class="nav-item"><a href="../blog.php" class="nav-link">Blog</a></li>
                     <li class="nav-item"><a href="../about.php" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="../contact.php" class="nav-link">Contact</a></li>
+                    <li class="nav-item"><a href="../recensioni.php" class="nav-link">Recensioni</a></li>
                     <li class="nav-item d-flex align-items-center">
                         <?php if (isset($_SESSION['user']) && ($_SESSION['user']['gruppo'] ?? '') === 'admin'): ?>
                             <a href="../admin.php" class="btn btn-primary mr-2">Admin</a>
@@ -75,6 +76,9 @@ if (session_status() === PHP_SESSION_NONE) {
                     </li>
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'contact' ? 'active' : '' ?>">
                         <a href="contact.php" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'recensioni' ? 'active' : '' ?>">
+                        <a href="recensioni.php" class="nav-link">Recensioni</a>
                     </li>
                     <li class="nav-item d-flex align-items-center">
                         <?php if (isset($_SESSION['user']) && ($_SESSION['user']['gruppo'] ?? '') === 'admin'): ?>

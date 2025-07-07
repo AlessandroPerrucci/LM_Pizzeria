@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Lug 07, 2025 alle 01:14
+-- Creato il: Lug 07, 2025 alle 10:58
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -410,10 +410,18 @@ INSERT INTO `privilegi_gruppo` (`nome_gruppo`, `nome_privilegio`) VALUES
 CREATE TABLE `recensione` (
   `id` int(11) NOT NULL,
   `stelle` int(11) NOT NULL DEFAULT 5,
-  `commento` varchar(200) NOT NULL DEFAULT ' ',
+  `commento` varchar(2000) DEFAULT NULL,
   `data` datetime NOT NULL DEFAULT current_timestamp(),
   `foto` varchar(200) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `recensione`
+--
+
+INSERT INTO `recensione` (`id`, `stelle`, `commento`, `data`, `foto`) VALUES
+(5, 4, 'sium da prova1', '2025-07-07 10:37:39', NULL),
+(14, 5, 'prova1prova1', '2025-07-07 10:57:16', 'rec_686b8bec51323.jpeg');
 
 -- --------------------------------------------------------
 
@@ -497,7 +505,8 @@ CREATE TABLE `utente` (
 --
 
 INSERT INTO `utente` (`email`, `password`, `nickname`, `nome`, `cognome`, `foto_profilo`, `bio`, `favorite_pizza`, `str_preferenze`, `gruppo`, `recensione`) VALUES
-('cotugnol90@gmail.com', '$2y$10$t7h0CHgbYT0deYodpqQKRuAfk76WLl5Vm4ZbSGhLb3f4Hw0gaSZMy', 'leocot', 'sium', 'sium', 'images/profilo/cotugnol90_gmail_com.jpg', 'inserisci una bio', NULL, -1, 'admin', NULL);
+('cotugnol90@gmail.com', '$2y$10$t7h0CHgbYT0deYodpqQKRuAfk76WLl5Vm4ZbSGhLb3f4Hw0gaSZMy', 'bombardiroCrocodiro98', 'sium', 'sium', 'images/profilo/cotugnol90_gmail_com.jpg', 'inserisci una bio', NULL, -1, 'admin', 14),
+('prova1@gmail.com', '$2y$10$AxQtpO0mUBBwZ0sp7bwsUeD3emBCFHzPpNG6S1zEcOSWphHWwRaum', 'prova1', 'prova1', 'prova1', 'images/profilo/default.jpg', 'inserisci una bio', NULL, -1, 'user', 5);
 
 --
 -- Indici per le tabelle scaricate
@@ -661,7 +670,7 @@ ALTER TABLE `prenotazione`
 -- AUTO_INCREMENT per la tabella `recensione`
 --
 ALTER TABLE `recensione`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT per la tabella `str_preferenze`

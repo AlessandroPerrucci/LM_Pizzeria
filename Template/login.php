@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <?php $pagina_attiva = ''; ?>
 	<?php include 'header.php'; ?>
 
-  <div class="container mt-5">
+  <div class="container mt-5" style="margin-bottom: 8% !important;">
     <div class="form-profilo">
       <h2 class="text-center mb-4" style="color: #212529;">Accedi al tuo profilo</h2>
 
@@ -99,9 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
     </div>
   </div>
-
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
 
   <?php include 'footer.php'; ?>
 </body>
