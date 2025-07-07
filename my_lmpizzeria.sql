@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Lug 07, 2025 alle 10:58
+-- Creato il: Lug 07, 2025 alle 11:10
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -421,7 +421,7 @@ CREATE TABLE `recensione` (
 
 INSERT INTO `recensione` (`id`, `stelle`, `commento`, `data`, `foto`) VALUES
 (5, 4, 'sium da prova1', '2025-07-07 10:37:39', NULL),
-(14, 5, 'prova1prova1', '2025-07-07 10:57:16', 'rec_686b8bec51323.jpeg');
+(16, 5, 'Le caratteristiche della recensione. La recensione è un testo che analizza ed esprime giudizi su avvenimenti culturali (film, romanzi, libri, dischi, spettacoli teatrali, mostre di pittura...). Di solito pubblicata su giornali o\r\nriviste, presenta dimensioni contenute, stile discorsivo e non specialistico (le\r\nespressioni tecniche e settoriali sono spiegate perché il testo possa essere\r\ncompreso da un lettore non esperto). Lo scopo dell’emittente non è soltanto\r\nquello di fornire informazioni al lettore su un avvenimento culturale, ma anche\r\nquello di spingerlo a condividere il suo punto di vista sull’evento. Il testo deve\r\nrisultare convincente, quindi la recensione richiede conoscenze specifiche nell’ambito artistico o culturale in oggetto, poiché le opinioni espresse devono essere sostenute da argomentazioni fondate.', '2025-07-07 11:09:58', 'rec_686b8ee64114e.jpeg');
 
 -- --------------------------------------------------------
 
@@ -505,7 +505,7 @@ CREATE TABLE `utente` (
 --
 
 INSERT INTO `utente` (`email`, `password`, `nickname`, `nome`, `cognome`, `foto_profilo`, `bio`, `favorite_pizza`, `str_preferenze`, `gruppo`, `recensione`) VALUES
-('cotugnol90@gmail.com', '$2y$10$t7h0CHgbYT0deYodpqQKRuAfk76WLl5Vm4ZbSGhLb3f4Hw0gaSZMy', 'bombardiroCrocodiro98', 'sium', 'sium', 'images/profilo/cotugnol90_gmail_com.jpg', 'inserisci una bio', NULL, -1, 'admin', 14),
+('cotugnol90@gmail.com', '$2y$10$t7h0CHgbYT0deYodpqQKRuAfk76WLl5Vm4ZbSGhLb3f4Hw0gaSZMy', 'bombardiroCrocodiro98', 'sium', 'sium', 'images/profilo/cotugnol90_gmail_com.jpg', 'inserisci una bio', NULL, -1, 'admin', 16),
 ('prova1@gmail.com', '$2y$10$AxQtpO0mUBBwZ0sp7bwsUeD3emBCFHzPpNG6S1zEcOSWphHWwRaum', 'prova1', 'prova1', 'prova1', 'images/profilo/default.jpg', 'inserisci una bio', NULL, -1, 'user', 5);
 
 --
@@ -670,7 +670,7 @@ ALTER TABLE `prenotazione`
 -- AUTO_INCREMENT per la tabella `recensione`
 --
 ALTER TABLE `recensione`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT per la tabella `str_preferenze`

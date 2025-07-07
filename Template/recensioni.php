@@ -70,17 +70,32 @@ if ($utente && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['invia_rece
 if ($utente && isset($_POST['elimina_recensione'])) {
     $rec_id = (int)$_POST['recensione_id'];
 
-    // Scollega l'utente dalla recensione
+    // 1. Recupera la foto associata alla recensione
+    $stmt = $pdo->prepare("SELECT foto FROM recensione WHERE id = :id");
+    $stmt->execute(['id' => $rec_id]);
+    $foto = $stmt->fetchColumn();
+
+    // 2. Elimina la recensione dal DB
+    $pdo->prepare("DELETE FROM recensione WHERE id = :id")->execute(['id' => $rec_id]);
+
+    // 3. Scollega l'utente dalla recensione
     $pdo->prepare("UPDATE utente SET recensione = NULL WHERE email = :email")
         ->execute(['email' => $utente['email']]);
 
-    // Elimina la recensione
-    $pdo->prepare("DELETE FROM recensione WHERE id = :id")->execute(['id' => $rec_id]);
+    // 4. Elimina la foto dal filesystem, se presente
+    if ($foto) {
+        $nome_file = basename($foto); // in caso ci sia il path nel DB
+        $path = "images/recensioni/" . $nome_file;
+        if (file_exists($path)) {
+            unlink($path);
+        }
+    }
 
     $_SESSION['flash'] = ['tipo' => 'success', 'testo' => 'Recensione eliminata.'];
     header("Location: recensioni.php");
     exit();
 }
+
 
 $recensione_utente = null;
 $altre_recensioni = [];
