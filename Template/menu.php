@@ -81,13 +81,22 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 		
 		<div class="container-wrap">
 			<div class="row no-gutters d-flex">
-				<?php foreach ($pizze as $pizza): ?>
+				<?php
+				$cont=0;
+				foreach ($pizze as $pizza):
+				if($cont>5){
+					break;
+				} ?>
 					<div class="col-lg-4 d-flex ftco-animate">
 						<div class="services-wrap d-flex">
 						<?php
 						$nomePizza = $pizza['nome']; // dal database
 						$nomeFile = str_replace(' ', '_', $nomePizza);
-						echo '<a href="#" class="img" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></a>';
+						if($cont > 2){
+							echo '<a href="#" class="img order-lg-last" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></a>';
+						}else{
+							echo '<a href="#" class="img" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></a>';
+						}
 						?>
 						<div class="text p-4">
 							<h3><?php echo $pizza['nome']?></h3>
@@ -96,7 +105,9 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 						</div>
 					</div>
 				</div>
-				<?php endforeach; ?>
+				<?php
+			$cont++;
+			endforeach; ?>
 			</div>
 		</div>
 
@@ -157,10 +168,13 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 
 								<div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
 									<div class="row">
-										<?php foreach ($contorni as $contorno): ?>
+										<?php foreach ($contorni as $contorno):
+											$nomeContorno = $contorno['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeContorno);
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pizza-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoContorni/'.$nomeFile.'.jpg);"></a>'; ?>
 												<div class="text">
 													<h3> <?php echo $contorno['nome']?> </h3>
 													<p> <?php echo $contorno['descrizione']?> </p>
@@ -175,10 +189,14 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 
 								<div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
 									<div class="row">
-										<?php foreach ($bevande as $bevanda): ?>
+										<?php foreach ($bevande as $bevanda):
+											$nomeBevanda = $bevanda['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeBevanda);
+											
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pizza-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoBevande/'.$nomeFile.'.jpg);"></a>'; ?>
 												<div class="text">
 													<h3> <?php echo $bevanda['nome']?> </h3>
 													<p> <?php echo $bevanda['descrizione']?> </p>
@@ -193,10 +211,14 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 
 								<div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
 									<div class="row">
-										<?php foreach ($antipasti as $antipasto): ?>
+										<?php foreach ($antipasti as $antipasto): 
+											$nomeAntipasto = $antipasto['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeAntipasto);
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pizza-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoAntipasti/'.$nomeFile.'.jpg);"></a>' ?>
+												
 												<div class="text">
 													<h3> <?php echo $antipasto['nome']?> </h3>
 													<p> <?php echo $antipasto['descrizione']?> </p>
@@ -211,10 +233,14 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 
 								<div class="tab-pane fade" id="v-pills-4" role="tabpanel" aria-labelledby="v-pills-4-tab">
 									<div class="row">
-										<?php foreach ($secondi as $secondo): ?>
+										<?php foreach ($secondi as $secondo):
+											$nomeSecondo = $secondo['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeSecondo);
+											
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pizza-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoSecondi/'.$nomeFile.'.jpg);"></a>'; ?>
 												<div class="text">
 													<h3> <?php echo $secondo['nome']?> </h3>
 													<p> <?php echo $secondo['descrizione']?> </p>
