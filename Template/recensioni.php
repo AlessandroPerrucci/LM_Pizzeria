@@ -190,6 +190,18 @@ $altre_recensioni = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php $pagina_attiva = ''; ?>
     <?php include 'header.php'; ?>
 
+    <section class="slider-item" style="background-image: url('images/bg_3.jpg'); min-height: 300px; position: relative;">
+    <div class="overlay" style="background: rgba(0,0,0,0.5); position:absolute; top:0; left:0; right:0; bottom:0;"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="row justify-content-center align-items-center" style="min-height: 300px;">
+            <div class="col-md-8 text-center text-white">
+                <h1 class="mb-3">Cosa dicono di noi</h1>
+                <p class="breadcrumbs"><a href="index.php" class="text-white">Home</a> <span class="mx-2 text-white">&gt;</span> <span>Recensioni</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
     <section class="ftco-section">
         <div class="container">
 
