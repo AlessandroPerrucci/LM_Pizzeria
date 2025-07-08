@@ -2,12 +2,88 @@
 session_start();
 require_once 'config.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+// Inizializza il carrello nella sessione se non esiste
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+// Gestione AJAX per aggiornare il carrello
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
+    header('Content-Type: application/json');
+    
+    switch ($_POST['action']) {
+        case 'add_to_cart':
+            $item = [
+                'tipo' => $_POST['tipo'],
+                'nome' => $_POST['nome'],
+                'prezzo' => floatval($_POST['prezzo']),
+                'quantita' => 1,
+                'nome_persona' => $_POST['nome_persona'],
+                'note' => ''
+            ];
+            
+            // Cerca se l'articolo esiste già
+            $found = false;
+            foreach ($_SESSION['cart'] as &$cartItem) {
+                if ($cartItem['tipo'] === $item['tipo'] && 
+                    $cartItem['nome'] === $item['nome'] && 
+                    $cartItem['nome_persona'] === $item['nome_persona']) {
+                    $cartItem['quantita']++;
+                    $found = true;
+                    break;
+                }
+            }
+            
+            if (!$found) {
+                $_SESSION['cart'][] = $item;
+            }
+            
+            echo json_encode(['success' => true, 'cart' => $_SESSION['cart']]);
+            exit;
+            
+        case 'remove_from_cart':
+            $index = intval($_POST['index']);
+            if (isset($_SESSION['cart'][$index])) {
+                array_splice($_SESSION['cart'], $index, 1);
+            }
+            echo json_encode(['success' => true, 'cart' => $_SESSION['cart']]);
+            exit;
+            
+        case 'change_quantity':
+            $index = intval($_POST['index']);
+            $delta = intval($_POST['delta']);
+            
+            if (isset($_SESSION['cart'][$index])) {
+                $_SESSION['cart'][$index]['quantita'] += $delta;
+                if ($_SESSION['cart'][$index]['quantita'] <= 0) {
+                    array_splice($_SESSION['cart'], $index, 1);
+                }
+            }
+            echo json_encode(['success' => true, 'cart' => $_SESSION['cart']]);
+            exit;
+            
+        case 'update_note':
+            $index = intval($_POST['index']);
+            $note = $_POST['note'];
+            
+            if (isset($_SESSION['cart'][$index])) {
+                $_SESSION['cart'][$index]['note'] = $note;
+            }
+            echo json_encode(['success' => true, 'cart' => $_SESSION['cart']]);
+            exit;
+            
+        case 'get_cart':
+            echo json_encode(['cart' => $_SESSION['cart']]);
+            exit;
+    }
+}
+
+// Gestione ordine
+if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action'])) {
     $user_name = $_SESSION['user'];
     
-    // Decodifica i dati del carrello inviati come JSON
-    $carrello_json = $_POST['carrello'] ?? '';
-    $carrello = json_decode($carrello_json, true);
+    // Usa il carrello dalla sessione
+    $carrello = $_SESSION['cart'];
     
     if (!empty($carrello)) {
         try {
@@ -77,6 +153,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             $pdo->commit();
+            
+            // Svuota il carrello dopo l'ordine
+            $_SESSION['cart'] = [];
+            
             $successo = true;
         } catch (Exception $e) {
             $pdo->rollBack();
@@ -321,7 +401,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             
             <div class="mt-4 pt-4 border-top">
                 <form method="POST" action="" id="checkoutForm">
-                    <input type="hidden" name="carrello" id="carrelloData">
                     <button type="submit" class="btn btn-primary btn-block" id="checkoutBtn" disabled>
                         Conferma Ordine
                     </button>
@@ -490,46 +569,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <script>
-        let cart = [];
+        // Carica il carrello dalla sessione al caricamento della pagina
+        let cart = <?= json_encode($_SESSION['cart']) ?>;
         
         function addToCart(tipo, nome, prezzo) {
             const personInput = document.getElementById(`person-${tipo}-${nome}`);
             const nomePerson = personInput.value.trim() || '<?= $_SESSION['user'] ?>';
             
-            // Controlla se l'articolo esiste già nel carrello
-            const existingItem = cart.find(item => 
-                item.tipo === tipo && 
-                item.nome === nome && 
-                item.nome_persona === nomePerson
-            );
-            
-            if (existingItem) {
-                existingItem.quantita++;
-            } else {
-                cart.push({
-                    tipo: tipo,
-                    nome: nome,
-                    prezzo: prezzo,
-                    quantita: 1,
-                    nome_persona: nomePerson,
-                    note: ''
-                });
-            }
-            
-            // Pulisci il campo nome persona
-            personInput.value = '';
-            
-            updateCartDisplay();
-            
-            // Mostra feedback visivo
-            const button = event.target;
-            const originalText = button.textContent;
-            button.textContent = 'Aggiunto!';
-            button.style.background = '#28a745';
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = '#d4a574';
-            }, 1000);
+            // Invia richiesta AJAX per aggiungere al carrello
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=add_to_cart&tipo=${encodeURIComponent(tipo)}&nome=${encodeURIComponent(nome)}&prezzo=${prezzo}&nome_persona=${encodeURIComponent(nomePerson)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cart = data.cart;
+                    updateCartDisplay();
+                    
+                    // Pulisci il campo nome persona
+                    personInput.value = '';
+                    
+                    // Mostra feedback visivo
+                    const button = event.target;
+                    const originalText = button.textContent;
+                    button.textContent = 'Aggiunto!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#d4a574';
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
         }
         
         function updateCartDisplay() {
@@ -593,28 +670,66 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 cartItems.innerHTML = html;
                 checkoutBtn.disabled = false;
             }
-            
-            // Aggiorna i dati del carrello nel form
-            document.getElementById('carrelloData').value = JSON.stringify(cart);
         }
         
         function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartDisplay();
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=remove_from_cart&index=${index}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cart = data.cart;
+                    updateCartDisplay();
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
         }
         
         function changeQuantity(index, delta) {
-            cart[index].quantita += delta;
-            if (cart[index].quantita <= 0) {
-                removeFromCart(index);
-            } else {
-                updateCartDisplay();
-            }
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=change_quantity&index=${index}&delta=${delta}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cart = data.cart;
+                    updateCartDisplay();
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
         }
         
         function updateNote(index, note) {
-            cart[index].note = note;
-            updateCartDisplay();
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=update_note&index=${index}&note=${encodeURIComponent(note)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cart = data.cart;
+                    // Non aggiornare display per evitare perdita focus
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
         }
         
         function toggleCart() {
@@ -637,7 +752,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             overlay.classList.remove('active');
         }
         
-        // Inizializza il carrello
+        // Inizializza il carrello al caricamento della pagina
         updateCartDisplay();
     </script>
 
