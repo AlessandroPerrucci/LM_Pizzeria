@@ -1,4 +1,16 @@
-<?php session_start(); ?>
+<?php session_start();
+require_once 'config.php';
+$stmt = $pdo->query("SELECT * FROM pizza");
+$pizze = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmtCon = $pdo->query("SELECT * FROM contorno");
+$contorni = $stmtCon->fetchAll(PDO::FETCH_ASSOC);
+$stmtAnti = $pdo->query("SELECT * FROM antipasto");
+$antipasti = $stmtAnti->fetchAll(PDO::FETCH_ASSOC);
+$stmtSec = $pdo->query("SELECT * FROM secondo");
+$secondi = $stmtSec->fetchAll(PDO::FETCH_ASSOC);
+$stmtBev = $pdo->query("SELECT * FROM bevanda");
+$bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
+?>
 
 
 <!DOCTYPE html>
@@ -36,35 +48,8 @@
 </head>
 
 <body>
-
-	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-		<div class="container">
-			<a class="navbar-brand" href="index.php"><span class="flaticon-pizza-1 mr-1"></span>L.M.<br><small>Pizzeria</small></a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="oi oi-menu"></span> Menu
-			</button>
-			<div class="collapse navbar-collapse" id="ftco-nav">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a href="index.php" class="nav-link">Home</a></li>
-					<li class="nav-item"><a href="menu.php" class="nav-link">Menu</a></li>
-					<li class="nav-item"><a href="services.php" class="nav-link">Services</a></li>
-					<li class="nav-item"><a href="blog.php" class="nav-link">Blog</a></li>
-					<li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
-					<li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
-					<li class="nav-item d-flex align-items-center">
-						<?php if (isset($_SESSION['user'])): ?>
-							<a href="profilo.php" class="btn btn-primary mr-2">
-								<?= htmlspecialchars($_SESSION['user']['nickname']) ?>
-							</a>
-							<a href="logout.php" class="btn btn-outline-light">Logout</a>
-						<?php else: ?>
-							<a href="login.php" class="btn btn-primary">Login</a>
-						<?php endif; ?>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	<?php $pagina_attiva = 'home'; ?>
+	<?php include 'header.php'; ?>
 	<!-- END nav -->
 
 	<section class="home-slider owl-carousel img" style="background-image: url(images/bg_1.jpg);">
@@ -76,7 +61,7 @@
 					<div class="col-md-6 col-sm-12 ftco-animate">
 						<span class="subheading">Delicious</span>
 						<h1 class="mb-4">Italian Cuizine</h1>
-						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.  </p>
+						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
 						<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
 					</div>
 					<div class="col-md-6 ftco-animate">
@@ -166,10 +151,10 @@
 		<div class="one-half img" style="background-image: url(images/about.jpg);"></div>
 		<div class="one-half ftco-animate">
 			<div class="heading-section ftco-animate ">
-				<h2 class="mb-4">Welcome to <span class="flaticon-pizza">L.M Pizzeria</span> Restaurant</h2>
+				<h2 class="mb-4">Welcome to <span class="flaticon-pizza">L.M Pizzeria</span> A Restaurant</h2>
 			</div>
 			<div>
-				<p>At our pizzeria, every slice tells a story — crafted with locally sourced ingredients, real Italian recipes, and a passion for flavor. We follow high standards to deliver delicious pizza that's fresh, authentic, and unforgettable. Taste Italy, one bite at a time. </p>
+				<p>At our pizzeria, every slice tells a story — crafted with locally sourced ingredients, real Italian recipes, and a passion for flavor. We follow high standards to deliver delicious pizza that's fresh, authentic, and unforgettable. Taste Italy, one bite at a time.</p>
 			</div>
 		</div>
 	</section>
@@ -180,7 +165,7 @@
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
 					<h2 class="mb-4">Our Services</h2>
-					<p>Want to know what services we offer, or the quality and origin of our products? </p>
+					<p>Want to know what services we offer, or the quality and origin of our products?</p>
 				</div>
 			</div>
 			<div class="row">
@@ -230,67 +215,33 @@
 		</div>
 		<div class="container-wrap">
 			<div class="row no-gutters d-flex">
-				<div class="col-lg-4 d-flex ftco-animate">
-					<div class="services-wrap d-flex">
-						<a href="#" class="img" style="background-image: url(images/pizza-1.jpg);"></a>
+				<?php
+				$cont=0;
+				foreach ($pizze as $pizza):
+				if($cont>5){
+					break;
+				} ?>
+					<div class="col-lg-4 d-flex ftco-animate">
+						<div class="services-wrap d-flex">
+						<?php
+						$nomePizza = $pizza['nome']; // dal database
+						$nomeFile = str_replace(' ', '_', $nomePizza);
+						if($cont > 2){
+							echo '<a href="#" class="img order-lg-last" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></a>';
+						}else{
+							echo '<a href="#" class="img" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></a>';
+						}
+						?>
 						<div class="text p-4">
-							<h3>Italian Pizza</h3>
-							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia </p>
-							<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
+							<h3><?php echo $pizza['nome']?></h3>
+							<p> <?php echo $pizza['descrizione']?> </p>
+							<p class="price"><span>€<?php echo $pizza['prezzo']?></span> <a href="ordina.php" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 d-flex ftco-animate">
-					<div class="services-wrap d-flex">
-						<a href="#" class="img" style="background-image: url(images/pizza-2.jpg);"></a>
-						<div class="text p-4">
-							<h3>Greek Pizza</h3>
-							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-							<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 d-flex ftco-animate">
-					<div class="services-wrap d-flex">
-						<a href="#" class="img" style="background-image: url(images/pizza-3.jpg);"></a>
-						<div class="text p-4">
-							<h3>Caucasian Pizza</h3>
-							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-							<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-lg-4 d-flex ftco-animate">
-					<div class="services-wrap d-flex">
-						<a href="#" class="img order-lg-last" style="background-image: url(images/pizza-4.jpg);"></a>
-						<div class="text p-4">
-							<h3>American Pizza</h3>
-							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia </p>
-							<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 d-flex ftco-animate">
-					<div class="services-wrap d-flex">
-						<a href="#" class="img order-lg-last" style="background-image: url(images/pizza-5.jpg);"></a>
-						<div class="text p-4">
-							<h3>Tomatoe Pie</h3>
-							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-							<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 d-flex ftco-animate">
-					<div class="services-wrap d-flex">
-						<a href="#" class="img order-lg-last" style="background-image: url(images/pizza-6.jpg);"></a>
-						<div class="text p-4">
-							<h3>Margherita</h3>
-							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-							<p class="price"><span>$2.90</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
-						</div>
-					</div>
-				</div>
+				<?php
+			$cont++;
+			endforeach; ?>
 			</div>
 		</div>
 
@@ -304,105 +255,24 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
+					<?php foreach ($pizze as $pizza): ?>
 					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-1.jpg);"></div>
+						<?php
+						$nomePizza = $pizza['nome']; // dal database
+						$nomeFile = str_replace(' ', '_', $nomePizza);
+						echo '<div class="img" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></div>'
+						?>
 						<div class="desc pl-3">
 							<div class="d-flex text align-items-center">
-								<h3><span>Italian Pizza</span></h3>
-								<span class="price">$20.00</span>
+								<h3><span><?php echo $pizza['nome']?></span></h3>
+								<span class="price">€<?php echo $pizza['prezzo']?></span>
 							</div>
 							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
+								<p><?php echo $pizza['descrizione']?> </p>
 							</div>
 						</div>
 					</div>
-					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-2.jpg);"></div>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span>Hawaiian Pizza</span></h3>
-								<span class="price">$29.00</span>
-							</div>
-							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
-							</div>
-						</div>
-					</div>
-					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-3.jpg);"></div>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span>Greek Pizza</span></h3>
-								<span class="price">$20.00</span>
-							</div>
-							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
-							</div>
-						</div>
-					</div>
-					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-4.jpg);"></div>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span>Bacon Crispy Thins</span></h3>
-								<span class="price">$20.00</span>
-							</div>
-							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-6">
-					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-5.jpg);"></div>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span>Hawaiian Special</span></h3>
-								<span class="price">$49.91</span>
-							</div>
-							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
-							</div>
-						</div>
-					</div>
-					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-6.jpg);"></div>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span>Ultimate Overload</span></h3>
-								<span class="price">$20.00</span>
-							</div>
-							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
-							</div>
-						</div>
-					</div>
-					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-7.jpg);"></div>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span>Bacon Pizza</span></h3>
-								<span class="price">$20.00</span>
-							</div>
-							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
-							</div>
-						</div>
-					</div>
-					<div class="pricing-entry d-flex ftco-animate">
-						<div class="img" style="background-image: url(images/pizza-8.jpg);"></div>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span>Ham &amp; Pineapple</span></h3>
-								<span class="price">$20.00</span>
-							</div>
-							<div class="d-block">
-								<p>A small river named Duden flows by their place and supplies</p>
-							</div>
-						</div>
-					</div>
+					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
@@ -501,13 +371,13 @@
 					<div class="row">
 						<div class="col-md-12 nav-link-wrap mb-5">
 							<div class="nav ftco-animate nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-								<a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Pizza</a>
+								<a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Contorni</a>
 
 								<a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Drinks</a>
 
-								<a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Burgers</a>
+								<a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Antipasti</a>
 
-								<a class="nav-link" id="v-pills-4-tab" data-toggle="pill" href="#v-pills-4" role="tab" aria-controls="v-pills-4" aria-selected="false">Pasta</a>
+								<a class="nav-link" id="v-pills-4-tab" data-toggle="pill" href="#v-pills-4" role="tab" aria-controls="v-pills-4" aria-selected="false">Secondi</a>
 							</div>
 						</div>
 						<div class="col-md-12 d-flex align-items-center">
@@ -516,153 +386,88 @@
 
 								<div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
 									<div class="row">
+										<?php foreach ($contorni as $contorno):
+											$nomeContorno = $contorno['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeContorno);
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pizza-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoContorni/'.$nomeFile.'.jpg);"></a>'; ?>
 												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
+													<h3> <?php echo $contorno['nome']?> </h3>
+													<p> <?php echo $contorno['descrizione']?> </p>
+													<p class="price"><span>€ <?php echo $contorno['prezzo']?></span></p>
 													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pizza-2.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pizza-3.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
+										<?php endforeach; ?>
 									</div>
 								</div>
 
 								<div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
 									<div class="row">
+										<?php foreach ($bevande as $bevanda):
+											$nomeBevanda = $bevanda['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeBevanda);
+											
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoBevande/'.$nomeFile.'.jpg);"></a>'; ?>
 												<div class="text">
-													<h3><a href="#">Lemonade Juice</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
+													<h3> <?php echo $bevanda['nome']?> </h3>
+													<p> <?php echo $bevanda['descrizione']?> </p>
+													<p class="price"><span>€ <?php echo $bevanda['prezzo']?></span></p>
 													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-2.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Pineapple Juice</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-3.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Soda Drinks</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
+										<?php endforeach; ?>
 									</div>
 								</div>
 
 								<div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
 									<div class="row">
+										<?php foreach ($antipasti as $antipasto): 
+											$nomeAntipasto = $antipasto['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeAntipasto);
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/burger-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoAntipasti/'.$nomeFile.'.jpg);"></a>' ?>
+												
 												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
+													<h3> <?php echo $antipasto['nome']?> </h3>
+													<p> <?php echo $antipasto['descrizione']?> </p>
+													<p class="price"><span>€ <?php echo $antipasto['prezzo']?></span></p>
 													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/burger-2.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/burger-3.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
+										<?php endforeach; ?>
 									</div>
 								</div>
 
 								<div class="tab-pane fade" id="v-pills-4" role="tabpanel" aria-labelledby="v-pills-4-tab">
 									<div class="row">
+										<?php foreach ($secondi as $secondo):
+											$nomeSecondo = $secondo['nome']; // dal database
+											$nomeFile = str_replace(' ', '_', $nomeSecondo);
+											
+											?>
 										<div class="col-md-4 text-center">
 											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pasta-1.jpg);"></a>
+												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoSecondi/'.$nomeFile.'.jpg);"></a>'; ?>
 												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
+													<h3> <?php echo $secondo['nome']?> </h3>
+													<p> <?php echo $secondo['descrizione']?> </p>
+													<p class="price"><span>€ <?php echo $secondo['prezzo']?></span></p>
 													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pasta-2.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<a href="#" class="menu-img img mb-4" style="background-image: url(images/pasta-3.jpg);"></a>
-												<div class="text">
-													<h3><a href="#">Itallian Pizza</a></h3>
-													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-													<p class="price"><span>$2.90</span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
-												</div>
-											</div>
-										</div>
+										<?php endforeach; ?>
 									</div>
 								</div>
 							</div>
@@ -764,84 +569,7 @@
 		</div>
 	</section>
 
-	<footer class="ftco-footer ftco-section img">
-		<div class="overlay"></div>
-		<div class="container">
-			<div class="row mb-5">
-				<div class="col-lg-3 col-md-6 mb-5 mb-md-5">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">About Us</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-						<ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-							<li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-							<li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-							<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 mb-5 mb-md-5">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Recent Blog</h2>
-						<div class="block-21 mb-4 d-flex">
-							<a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
-							<div class="text">
-								<h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-								<div class="meta">
-									<div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-									<div><a href="#"><span class="icon-person"></span> Admin</a></div>
-									<div><a href="#"><span class="icon-chat"></span> 19</a></div>
-								</div>
-							</div>
-						</div>
-						<div class="block-21 mb-4 d-flex">
-							<a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
-							<div class="text">
-								<h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-								<div class="meta">
-									<div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-									<div><a href="#"><span class="icon-person"></span> Admin</a></div>
-									<div><a href="#"><span class="icon-chat"></span> 19</a></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-2 col-md-6 mb-5 mb-md-5">
-					<div class="ftco-footer-widget mb-4 ml-md-4">
-						<h2 class="ftco-heading-2">Services</h2>
-						<ul class="list-unstyled">
-							<li><a href="#" class="py-2 d-block">Cooked</a></li>
-							<li><a href="#" class="py-2 d-block">Deliver</a></li>
-							<li><a href="#" class="py-2 d-block">Quality Foods</a></li>
-							<li><a href="#" class="py-2 d-block">Mixed</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6 mb-5 mb-md-5">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Have a Questions?</h2>
-						<div class="block-23 mb-3">
-							<ul>
-								<li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-								<li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-								<li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12 text-center">
-
-					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						Copyright &copy;<script>
-							document.write(new Date().getFullYear());
-						</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-				</div>
-			</div>
-		</div>
-	</footer>
+	<?php include 'footer.php'; ?>
 
 
 

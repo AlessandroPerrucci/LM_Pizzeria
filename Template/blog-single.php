@@ -94,57 +94,38 @@ $recentPosts = $pdo
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title><?= h($post['title']) ?> - Blog</title>
+  <title>Blog</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- CSS e font -->
-  <link rel="icon" href="./icons/pizza.ico">
+
+  <link rel="icon" type="image/x-icon" href="./icons/pizza.ico">
+
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+
   <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
   <link rel="stylesheet" href="css/animate.css">
+
   <link rel="stylesheet" href="css/owl.carousel.min.css">
   <link rel="stylesheet" href="css/owl.theme.default.min.css">
   <link rel="stylesheet" href="css/magnific-popup.css">
+
   <link rel="stylesheet" href="css/aos.css">
+
   <link rel="stylesheet" href="css/ionicons.min.css">
+
   <link rel="stylesheet" href="css/bootstrap-datepicker.css">
   <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+
   <link rel="stylesheet" href="css/flaticon.css">
   <link rel="stylesheet" href="css/icomoon.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-    <div class="container">
-      <a class="navbar-brand" href="index.php"><span class="flaticon-pizza-1 mr-1"></span>L.M.<br><small>Pizzeria</small></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="oi oi-menu"></span> Menu
-      </button>
-      <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="menu.php" class="nav-link">Menu</a></li>
-          <li class="nav-item"><a href="services.php" class="nav-link">Services</a></li>
-          <li class="nav-item active"><a href="blog.php" class="nav-link">Blog</a></li>
-          <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
-          <li class="nav-item d-flex align-items-center">
-            <?php if (isset($_SESSION['user'])): ?>
-              <a href="profilo.php" class="btn btn-primary mr-2">
-                <?= htmlspecialchars($_SESSION['user']['nickname']) ?>
-              </a>
-              <a href="logout.php" class="btn btn-outline-light">Logout</a>
-            <?php else: ?>
-              <a href="login.php" class="btn btn-primary">Login</a>
-            <?php endif; ?>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php $pagina_attiva = 'blog'; ?>
+  <?php include 'header.php'; ?>
   <!-- END nav -->
 
   <!-- HERO -->
@@ -279,82 +260,7 @@ $recentPosts = $pdo
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="ftco-footer ftco-section img">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row mb-5">
-        <!-- About Us -->
-        <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">About Us</h2>
-            <p>Far far away, behind the word mountains …</p>
-            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-              <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-              <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-              <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-            </ul>
-          </div>
-        </div>
-        <!-- Recent Blog -->
-        <div class="col-lg-4 col-md-6 mb-5 mb-md-5">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Recent Blog</h2>
-            <?php foreach ($recentPosts as $r): ?>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4"
-                   style="background-image: url('<?= h($r['image']) ?>');"></a>
-                <div class="text">
-                  <h3 class="heading">
-                    <a href="blog-single.php?id=<?= $r['id'] ?>"><?= h($r['title']) ?></a>
-                  </h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> <?= date('M d, Y', strtotime($r['created_at'])) ?></a></div>
-                    <div><a href="#"><span class="icon-person"></span> <?= h($r['author']) ?></a></div>
-                    <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 0</a></div>
-                  </div>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-        <!-- Services -->
-        <div class="col-lg-2 col-md-6 mb-5 mb-md-5">
-          <div class="ftco-footer-widget mb-4 ml-md-4">
-            <h2 class="ftco-heading-2">Services</h2>
-            <ul class="list-unstyled">
-              <li><a href="#" class="py-2 d-block">Cooked</a></li>
-              <li><a href="#" class="py-2 d-block">Deliver</a></li>
-              <li><a href="#" class="py-2 d-block">Quality Foods</a></li>
-              <li><a href="#" class="py-2 d-block">Mixed</a></li>
-            </ul>
-          </div>
-        </div>
-        <!-- Have a Questions? -->
-        <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Have a Questions?</h2>
-            <div class="block-23 mb-3">
-              <ul>
-                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. …</span></li>
-                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Copyright -->
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <p>
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-            All rights reserved | Made with <i class="icon-heart" aria-hidden="true"></i> by Colorlib
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <?php include 'footer.php'; ?>
 
   <!-- loader e script -->
   <div id="ftco-loader" class="show fullscreen">…</div>
