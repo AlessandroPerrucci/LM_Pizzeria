@@ -1,4 +1,79 @@
-<?php session_start(); ?>
+<?php 
+session_start();
+require_once 'config.php';
+
+// Recenti per il footer
+$recentStmt = $pdo->prepare("
+    SELECT id, title, created_at, image, author
+    FROM blog_posts
+    ORDER BY created_at DESC
+    LIMIT 2
+");
+$recentStmt->execute();
+$recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
+
+function generateExcerpt($text, $maxLength = 100) {
+  $text = strip_tags($text);
+  if (strlen($text) <= $maxLength) return $text;
+  $cut = substr($text, 0, $maxLength);
+  $cut = substr($cut, 0, strrpos($cut, ' '));
+  return $cut . '...';
+}
+
+// 1) Recupera tutte le categorie per la sidebar
+$categoriesStmt = $pdo->query("SELECT id,name FROM blog_categories ORDER BY name");
+$categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// 2) Legge il filtro categoria (se esiste e numerico)
+$categoryId = isset($_GET['category']) && is_numeric($_GET['category'])
+  ? (int)$_GET['category'] 
+  : null;
+
+// 3) Costruisce la parte WHERE e i parametri per le query
+$where = '';
+$params = [];
+if ($categoryId) {
+  $where = 'WHERE category_id = :category';
+  $params['category'] = $categoryId;
+}
+
+// 4) Conteggio totale per il filtro (per paginazione)
+$countSql = "SELECT COUNT(*) FROM blog_posts $where";
+$countStmt = $pdo->prepare($countSql);
+$countStmt->execute($params);
+$totalPosts = $countStmt->fetchColumn();
+// numero totale di tutti i post (per la voce “All”)
+$allCountStmt = $pdo->query("SELECT COUNT(*) FROM blog_posts");
+$allCount = $allCountStmt->fetchColumn();
+
+
+// 5) Paginazione
+$limit = 6;
+$page  = max(1, (int)($_GET['page'] ?? 1));
+$offset = ($page - 1) * $limit;
+$totalPages = ceil($totalPosts / $limit);
+
+// Blocchi di 6 pagine
+$pageBlock = ceil($page / 6);
+$startPage = ($pageBlock - 1) * 6 + 1;
+$endPage   = min($startPage + 5, $totalPages);
+
+// 6) Query dei post paginati + filtro
+$sql = "SELECT * FROM blog_posts
+        $where
+        ORDER BY created_at DESC
+        LIMIT :limit OFFSET :offset";
+$stmt = $pdo->prepare($sql);
+// bind filtro
+if ($categoryId) {
+  $stmt->bindValue(':category', $categoryId, PDO::PARAM_INT);
+}
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 
 
 <!DOCTYPE html>
@@ -77,130 +152,95 @@
             <h1 class="mb-3 mt-5 bread">Read our Blog</h1>
             <p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>Blog</span></p>
           </div>
-
         </div>
       </div>
     </div>
   </section>
 
+<section class="ftco-section">
+  <div class="container">
+    <!-- Titolo sezione -->
+    <div class="row justify-content-center mb-5 pb-3">
+      <div class="col-md-7 heading-section ftco-animate text-center">
+        <h2 class="mb-4">Blog posts</h2>
+        <p>Remain updated with all our latest news, and learn something new about Italian Cooking.</p>
+      </div>
+    </div>
+    <!-- Logica per limitare blog in base alla categoria -->
+    <div class="sidebar-box ftco-animate">
+  <h3>Categories</h3>
+  <ul class="categories">
+    <li><a href="blog.php">All <span>(<?= $allCount?>)</span></a></li>
+    <?php foreach ($categories as $cat): ?>
+      <li>
+        <a href="blog.php?category=<?= $cat['id'] ?>">
+          <?= htmlspecialchars($cat['name']) ?>
+          <span>(
+            <?php
+              $countStmt = $pdo->prepare("SELECT COUNT(*) FROM blog_posts WHERE category_id = ?");
+              $countStmt->execute([$cat['id']]);
+              echo $countStmt->fetchColumn();
+            ?>
+          )</span>
+        </a>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+</div>
 
-  <section class="ftco-section">
-    <div class="container">
-      <div class="row justify-content-center mb-5 pb-3">
-        <div class="col-md-7 heading-section ftco-animate text-center">
-          <h2 class="mb-4">Read our blog</h2>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-        </div>
-      </div>
-      <div class="row d-flex">
+
+    <!-- Stampa di tutti i blog post-->
+    <div class="row d-flex">
+      <?php foreach ($posts as $post): ?>
         <div class="col-md-4 d-flex ftco-animate">
           <div class="blog-entry align-self-stretch">
-            <a href="blog-single.php" class="block-20" style="background-image: url('images/image_1.jpg');">
+            <a href="blog-single.php?id=<?= $post['id'] ?>" class="block-20" style="background-image: url('<?= htmlspecialchars($post['image']) ?>');">
             </a>
             <div class="text py-4 d-block">
               <div class="meta">
-                <div><a href="#">Sept 10, 2018</a></div>
-                <div><a href="#">Admin</a></div>
-                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                <div><a href="#"><?= date('M d, Y', strtotime($post['created_at'])) ?></a></div>
+                <div><a href="#"><?= htmlspecialchars($post['author']) ?></a></div>
+                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 0</a></div>
               </div>
-              <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              <h3 class="heading mt-2">
+                <a href="blog-single.php?id=<?= $post['id'] ?>">
+                  <?= htmlspecialchars($post['title']) ?>
+                </a>
+              </h3>
+              <p><?= htmlspecialchars($post['subtitle'] ?? generateExcerpt($post['content'])) ?></p>
             </div>
           </div>
         </div>
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a href="blog-single.php" class="block-20" style="background-image: url('images/image_2.jpg');">
-            </a>
-            <div class="text py-4 d-block">
-              <div class="meta">
-                <div><a href="#">Sept 10, 2018</a></div>
-                <div><a href="#">Admin</a></div>
-                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-              </div>
-              <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a href="blog-single.php" class="block-20" style="background-image: url('images/image_3.jpg');">
-            </a>
-            <div class="text py-4 d-block">
-              <div class="meta">
-                <div><a href="#">Sept 10, 2018</a></div>
-                <div><a href="#">Admin</a></div>
-                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-              </div>
-              <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a href="blog-single.php" class="block-20" style="background-image: url('images/image_4.jpg');">
-            </a>
-            <div class="text py-4 d-block">
-              <div class="meta">
-                <div><a href="#">Sept 10, 2018</a></div>
-                <div><a href="#">Admin</a></div>
-                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-              </div>
-              <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a href="blog-single.php" class="block-20" style="background-image: url('images/image_5.jpg');">
-            </a>
-            <div class="text py-4 d-block">
-              <div class="meta">
-                <div><a href="#">Sept 10, 2018</a></div>
-                <div><a href="#">Admin</a></div>
-                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-              </div>
-              <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 d-flex ftco-animate">
-          <div class="blog-entry align-self-stretch">
-            <a href="blog-single.php" class="block-20" style="background-image: url('images/image_6.jpg');">
-            </a>
-            <div class="text py-4 d-block">
-              <div class="meta">
-                <div><a href="#">Sept 10, 2018</a></div>
-                <div><a href="#">Admin</a></div>
-                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-              </div>
-              <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mt-5">
-        <div class="col text-center">
-          <div class="block-27">
-            <ul>
-              <li><a href="#">&lt;</a></li>
-              <li class="active"><span>1</span></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">&gt;</a></li>
-            </ul>
-          </div>
+      <?php endforeach; ?>
+    </div>
+
+    <!-- Pagination -->
+    <div class="row mt-5">
+      <div class="col text-center">
+        <div class="block-27">
+          <ul>
+            <?php if ($startPage > 1): ?>
+              <li><a href="?page=<?= $startPage - 1 ?>">&lt;</a></li>
+            <?php endif; ?>
+
+            <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+              <?php if ($i == $page): ?>
+                <li class="active"><span><?= $i ?></span></li>
+              <?php else: ?>
+                <li><a href="?page=<?= $i ?>"><?= $i ?></a></li>
+              <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($endPage < $totalPages): ?>
+              <li><a href="?page=<?= $endPage + 1 ?>">&gt;</a></li>
+            <?php endif; ?>
+          </ul>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <footer class="ftco-footer ftco-section img">
     <div class="overlay"></div>
@@ -218,32 +258,40 @@
           </div>
         </div>
         <div class="col-lg-4 col-md-6 mb-5 mb-md-5">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Recent Blog</h2>
-            <div class="block-21 mb-4 d-flex">
-              <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
-              <div class="text">
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-                <div class="meta">
-                  <div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-                  <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                  <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                </div>
-              </div>
+  <div class="ftco-footer-widget mb-4">
+    <h2 class="ftco-heading-2">Recent Blog</h2>
+    <?php foreach($recentPosts as $r): ?>
+      <div class="block-21 mb-4 d-flex">
+        <a 
+          class="blog-img mr-4" 
+          style="background-image: url('<?= htmlspecialchars($r['image']) ?>');"
+          href="blog-single.php?id=<?= $r['id'] ?>"
+        ></a>
+        <div class="text">
+          <h3 class="heading">
+            <a href="blog-single.php?id=<?= $r['id'] ?>">
+              <?= htmlspecialchars($r['title']) ?>
+            </a>
+          </h3>
+          <div class="meta">
+            <div>
+              <a href="#">
+                <span class="icon-calendar"></span>
+                <?= date('M d, Y', strtotime($r['created_at'])) ?>
+              </a>
             </div>
-            <div class="block-21 mb-4 d-flex">
-              <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
-              <div class="text">
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-                <div class="meta">
-                  <div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-                  <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                  <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                </div>
-              </div>
+            <div>
+              <a href="#"><span class="icon-person"></span><?= htmlspecialchars($r['author']) ?></a>
+            </div>
+            <div>
+              <a href="#" class="meta-chat"><span class="icon-chat"></span>0</a>
             </div>
           </div>
         </div>
+      </div>
+    <?php endforeach; ?>
+  </div>
+</div>
         <div class="col-lg-2 col-md-6 mb-5 mb-md-5">
           <div class="ftco-footer-widget mb-4 ml-md-4">
             <h2 class="ftco-heading-2">Services</h2>
