@@ -59,10 +59,14 @@ $startPage = ($pageBlock - 1) * 6 + 1;
 $endPage   = min($startPage + 5, $totalPages);
 
 // 6) Query dei post paginati + filtro
-$sql = "SELECT * FROM blog_posts
-        $where
-        ORDER BY created_at DESC
-        LIMIT :limit OFFSET :offset";
+$sql = "SELECT p.*, COUNT(c.id) AS comment_count
+  FROM blog_posts p
+  LEFT JOIN blog_comments c ON p.id = c.post_id
+  $where
+  GROUP BY p.id
+  ORDER BY p.created_at DESC
+  LIMIT :limit OFFSET :offset
+";
 $stmt = $pdo->prepare($sql);
 // bind filtro
 if ($categoryId) {
@@ -174,7 +178,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <div class="meta">
                 <div><a href="#"><?= date('M d, Y', strtotime($post['created_at'])) ?></a></div>
                 <div><a href="#"><?= htmlspecialchars($post['author']) ?></a></div>
-                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 0</a></div>
+                <div><a href="#" class="meta-chat"><span class="icon-chat"></span>  <?= $post['comment_count'] ?></a></div>
               </div>
               <h3 class="heading mt-2">
                 <a href="blog-single.php?id=<?= $post['id'] ?>">
