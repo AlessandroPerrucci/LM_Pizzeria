@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
 
 // Gestione ordine
 if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($_POST['indirizzo'])) {
-    $user_name = $_SESSION['user'];
+    $user_name = $_SESSION['user']['nickname'];
     $indirizzo = $_POST['indirizzo'];
     $numero = $_POST['numero'];
     $metodo_pagamento = $_POST['metodo_pagamento'];
@@ -647,7 +647,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($
 
         function addToCart(tipo, nome, prezzo) {
             const personInput = document.getElementById(`person-${tipo}-${nome}`);
-            const nomePerson = personInput.value.trim() || '<?= $_SESSION['user'] ?>';
+            const nomePerson = personInput.value.trim() || '<?= $_SESSION['user']['nickname'] ?>';
 
             // Invia richiesta AJAX per aggiungere al carrello
             fetch('', {
@@ -814,6 +814,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($
             } else {
                 sidebar.classList.add('open');
                 overlay.classList.add('active');
+                document.querySelector('.cart-btn').style.display = 'none';
             }
         }
 
@@ -823,6 +824,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($
 
             sidebar.classList.remove('open');
             overlay.classList.remove('active');
+            document.querySelector('.cart-btn').style.display = 'block';
         }
 
         // Inizializza il carrello al caricamento della pagina
