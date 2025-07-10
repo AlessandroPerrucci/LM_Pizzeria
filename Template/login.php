@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user && password_verify($password, $user['password'])) {
       $_SESSION['user'] = $user;
+      $_SESSION['mail'] = $email;
       header("Location: index.php");
       exit;
     } else {

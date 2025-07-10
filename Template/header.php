@@ -79,14 +79,14 @@ if (session_status() === PHP_SESSION_NONE) {
                         ?>
                     </li>
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
-                        <?php if (isset($_SESSION['user'])){
+                        <?php if (isset($_SESSION['user']) && !(($_SESSION['user']['gruppo'] ?? '') === 'admin')){
                             echo '<a href="ordini.php" class="nav-link">Stato ordini</a>';
                             
                         }
                         ?>
                     </li>
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
-                        <?php if (isset($_SESSION['user'])){
+                        <?php if (isset($_SESSION['user']) && !(($_SESSION['user']['gruppo'] ?? '') === 'admin')){
                             echo '<a href="prenotaTavolo.php" class="nav-link">Prenota Tavolo</a>';
                             
                         }

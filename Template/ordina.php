@@ -266,7 +266,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($
 
         .cart-btn {
             position: fixed;
-            top: 20px;
+            top: 80px;
             right: 20px;
             z-index: 1001;
             background: #d4a574;
@@ -278,7 +278,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .cart-btn:hover {
             background: #c19660;
             transform: scale(1.05);
@@ -402,8 +401,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($
     <?php include 'header.php'; ?>
 
     <?php
-    $_SESSION['user'] = 'Alessandro';
-    $_SESSION['mail'] = 'perrucciale1808@gmail.com';
     if (isset($_SESSION['user'])) {
         // Recupera tutti i prodotti
         $stmt = $pdo->query("SELECT * FROM pizza ORDER BY nome");
@@ -477,7 +474,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['action']) && isset($
 
     <div class="container py-5">
         <div class="text-center mb-5">
-            <h1 style="font-family: 'Josefin Sans';">Benvenuto, <?= $_SESSION['user'] ?>!</h1>
+            <h1 style="font-family: 'Josefin Sans';">Benvenuto, <?php echo $_SESSION['user']['nickname']; ?>!</h1>
             <p class="lead">Scegli i tuoi prodotti preferiti e aggiungili al carrello</p>
         </div>
 
