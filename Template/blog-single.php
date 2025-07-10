@@ -1,14 +1,16 @@
 <?php
 session_start();
 require_once 'config.php';
+
 #------[Codice commenti]-------
 $post_id = $_GET['id'] ?? null;
-
-if (!$post_id) {
-  die("ID post mancante.");
+if (!$post_id || !is_numeric($post_id)) {
+  header("Location: blog.php");
+  exit;
 }
+$postId = (int) $post_id;
 
-// Recupera commenti per questo post
+// --- Recupera commenti per questo post
 $stmt = $pdo->prepare("
   SELECT c.content, c.created_at, u.nickname, u.foto_profilo 
   FROM blog_comments c 
@@ -16,18 +18,8 @@ $stmt = $pdo->prepare("
   WHERE c.post_id = :post_id 
   ORDER BY c.created_at DESC
 ");
-$stmt->execute(['post_id' => $post_id]);
+$stmt->execute(['post_id' => $postId]);
 $commenti = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-#------[robba]---------
-
-// --- Verifica ID valido
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-  header('Location: blog.php');
-  exit;
-}
-$postId = (int) $_GET['id'];
 
 // --- Recupera il post
 $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE id = :id");
@@ -60,12 +52,19 @@ foreach ($categories as $cat) {
   $counts[$cat['id']] = $countStmt->fetchColumn();
 }
 
-// --- Recent posts (ultimi 3)
-$recentPosts = $pdo
-  ->query("SELECT id, title, image, author, created_at FROM blog_posts ORDER BY created_at DESC LIMIT 3")
-  ->fetchAll(PDO::FETCH_ASSOC);
+// --- Recent posts (ultimi 2) + conteggio commenti (corretto)
+$recentPostsStmt = $pdo->query("
+  SELECT p.id, p.title, p.image, p.author, p.created_at, COUNT(c.id) AS comment_count
+  FROM blog_posts p
+  LEFT JOIN blog_comments c ON p.id = c.post_id
+  GROUP BY p.id
+  ORDER BY p.created_at DESC
+  LIMIT 2
+");
+$recentPosts = $recentPostsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
+// --- Commenti: inserimento se loggati
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
   if (!isset($_SESSION['user'])) {
     die("Accesso negato.");
   }
@@ -79,18 +78,45 @@ $recentPosts = $pdo
       VALUES (:post_id, :user_email, :content)
     ");
     $stmt->execute([
-      'post_id' => $post_id,
+      'post_id' => $postId,
       'user_email' => $email,
       'content' => $comment
     ]);
-    
-    // 🔄 Reload per evitare reinvio su refresh
-    header("Location: blog-single.php?id=$post_id");
+
+    // Redirect per evitare reinvio su refresh
+    header("Location: blog-single.php?id=$postId");
     exit;
   }
 }
 
+// --- (Facoltativo) Paginazione e filtro (se necessario)
+$limit = 5;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
+
+$where = ""; // aggiungi qui eventuali condizioni (es: filtro categoria)
+$categoryId = $_GET['category'] ?? null;
+
+$sql = "
+  SELECT p.*, COUNT(c.id) AS comment_count
+  FROM blog_posts p
+  LEFT JOIN blog_comments c ON p.id = c.post_id
+  $where
+  GROUP BY p.id
+  ORDER BY p.created_at DESC
+  LIMIT :limit OFFSET :offset
+";
+$stmt = $pdo->prepare($sql);
+
+if ($categoryId) {
+  $stmt->bindValue(':category', $categoryId, PDO::PARAM_INT);
+}
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -171,7 +197,7 @@ $recentPosts = $pdo
           </div>
 
           <!-- Commenti -->
-          <h4>💬 Commenti</h4>
+          <h4> Commenti</h4>
 <?php if (empty($commenti)): ?>
   <p>Nessun commento ancora.</p>
 <?php else: ?>
@@ -204,7 +230,7 @@ $recentPosts = $pdo
 
         <!-- Sidebar -->
         <div class="col-md-4 sidebar ftco-animate">
-          <!-- Search -->
+          <!-- Search 
           <div class="sidebar-box">
             <form action="#" class="search-form">
               <div class="form-group">
@@ -212,7 +238,7 @@ $recentPosts = $pdo
                 <input type="text" class="form-control" placeholder="Search...">
               </div>
             </form>
-          </div>
+          </div> -->
 
           <!-- Categories -->
           <div class="sidebar-box ftco-animate">
@@ -243,21 +269,14 @@ $recentPosts = $pdo
                   <div class="meta">
                     <div><a href="#"><span class="icon-calendar"></span> <?= date('M d, Y', strtotime($r['created_at'])) ?></a></div>
                     <div><a href="#"><span class="icon-person"></span> <?= h($r['author']) ?></a></div>
-                    <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 0</a></div>
+                    <div><a href="#" class="meta-chat"><span class="icon-chat"></span>  <?= $r['comment_count'] ?></a></div>
                   </div>
                 </div>
               </div>
             <?php endforeach; ?>
           </div>
 
-          <!-- Paragraph -->
-          <div class="sidebar-box ftco-animate">
-            <h3>Paragraph</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque …</p>
-          </div>
-        </div>
-      </div>
-    </div>
+          
   </section>
 
   <?php include 'footer.php'; ?>

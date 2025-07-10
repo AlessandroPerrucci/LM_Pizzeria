@@ -1,6 +1,8 @@
- <?php #logica per caricare blog recenti nel footer 
+<?php
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
-    require_once 'config.php';
+}
+require_once 'config.php';
 
     // Recenti per il footer
     $recentStmt = $pdo->prepare("
@@ -14,6 +16,8 @@
     $recentStmt->execute();
     $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 
+    
+if (!function_exists('generateExcerpt')) {
     function generateExcerpt($text, $maxLength = 100)
     {
         $text = strip_tags($text);
@@ -22,6 +26,9 @@
         $cut = substr($cut, 0, strrpos($cut, ' '));
         return $cut . '...';
     }
+}
+
+
 
     // 6) Query dei post paginati + filtro
     $sql = "SELECT p.*, COUNT(c.id) AS comment_count
@@ -32,6 +39,9 @@
     ORDER BY p.created_at DESC
     LIMIT :limit OFFSET :offset
     ";
+    $limit = isset($limit) ? (int)$limit : 2;
+    $offset = isset($offset) ? (int)$offset : 0;
+
     $stmt = $pdo->prepare($sql);
     // bind filtro
     if ($categoryId) {
@@ -41,7 +51,9 @@
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    if (!isset($pdo)) {
+    echo "<!-- Errore: connessione al database non disponibile -->";
+    return;}
     ?>
 <?php if ($pagina_attiva == 'onedirup'): ?>
 

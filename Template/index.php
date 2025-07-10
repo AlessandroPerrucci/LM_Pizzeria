@@ -10,6 +10,51 @@ $stmtSec = $pdo->query("SELECT * FROM secondo");
 $secondi = $stmtSec->fetchAll(PDO::FETCH_ASSOC);
 $stmtBev = $pdo->query("SELECT * FROM bevanda");
 $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
+
+#------------------[Robba per i blog]---------------------------------
+// 6) Query dei post paginati + filtro
+    $sql = "SELECT p.*, COUNT(c.id) AS comment_count
+    FROM blog_posts p
+    LEFT JOIN blog_comments c ON p.id = c.post_id
+    $where
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT :limit OFFSET :offset
+    ";
+    $limit = isset($limit) ? (int)$limit : 2;
+    $offset = isset($offset) ? (int)$offset : 0;
+
+    $stmt = $pdo->prepare($sql);
+    // bind filtro
+    if ($categoryId) {
+        $stmt->bindValue(':category', $categoryId, PDO::PARAM_INT);
+    }
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (!isset($pdo)) {
+    echo "<!-- Errore: connessione al database non disponibile -->";
+    return;}
+	// Recenti per il footer
+    $recentStmt = $pdo->prepare("
+    SELECT p.id, p.title, p.content, p.created_at, p.image, p.author, COUNT(c.id) AS comment_count
+    FROM blog_posts p
+    LEFT JOIN blog_comments c ON p.id = c.post_id
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT 3
+");
+
+    $recentStmt->execute();
+    $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
+	function generateExcerpt($text, $maxLength = 100) {
+  $text = strip_tags($text);
+  if (strlen($text) <= $maxLength) return $text;
+  $cut = substr($text, 0, $maxLength);
+  $cut = substr($cut, 0, strrpos($cut, ' '));
+  return $cut . '...';
+}
 ?>
 
 
@@ -483,59 +528,30 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
 					<h2 class="mb-4">Recent from blog</h2>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					<p>Remain updated with all our latest news, and learn something new about Italian Cooking.</p>
 				</div>
 			</div>
 			<div class="row d-flex">
-				<div class="col-md-4 d-flex ftco-animate">
-					<div class="blog-entry align-self-stretch">
-						<a href="blog-single.php" class="block-20" style="background-image: url('images/image_1.jpg');">
-						</a>
-						<div class="text py-4 d-block">
-							<div class="meta">
-								<div><a href="#">Sept 10, 2018</a></div>
-								<div><a href="#">Admin</a></div>
-								<div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-							</div>
-							<h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-							<p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 d-flex ftco-animate">
-					<div class="blog-entry align-self-stretch">
-						<a href="blog-single.php" class="block-20" style="background-image: url('images/image_2.jpg');">
-						</a>
-						<div class="text py-4 d-block">
-							<div class="meta">
-								<div><a href="#">Sept 10, 2018</a></div>
-								<div><a href="#">Admin</a></div>
-								<div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-							</div>
-							<h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-							<p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 d-flex ftco-animate">
-					<div class="blog-entry align-self-stretch">
-						<a href="blog-single.php" class="block-20" style="background-image: url('images/image_3.jpg');">
-						</a>
-						<div class="text py-4 d-block">
-							<div class="meta">
-								<div><a href="#">Sept 10, 2018</a></div>
-								<div><a href="#">Admin</a></div>
-								<div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-							</div>
-							<h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-							<p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+    <?php foreach ($recentPosts as $post): ?>
+        <div class="col-md-4 d-flex ftco-animate">
+            <div class="blog-entry align-self-stretch">
+                <a href="blog-single.php?id=<?= $post['id'] ?>" class="block-20" style="background-image: url('<?= htmlspecialchars($post['image']) ?>');">
+                </a>
+                <div class="text py-4 d-block">
+                    <div class="meta">
+                        <div><a href="#"><?= date('M j, Y', strtotime($post['created_at'])) ?></a></div>
+                        <div><a href="#"><?= htmlspecialchars($post['author']) ?></a></div>
+                        <div><a href="#" class="meta-chat"><span class="icon-chat"></span> <?= $post['comment_count'] ?></a></div>
+                    </div>
+                    <h3 class="heading mt-2"><a href="blog-single.php?id=<?= $post['id'] ?>"><?= htmlspecialchars($post['title']) ?></a></h3>
+                   <p><?= htmlspecialchars(!empty($post['subtitle']) ? $post['subtitle'] : generateExcerpt($post['content'])) ?></p>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
 
+	</section>
 
 	<section class="ftco-appointment">
 		<div class="overlay"></div>
