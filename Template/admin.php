@@ -60,7 +60,7 @@ if ($gruppo !== 'admin') {
         <div class="overlay" style=" position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
         <div class="container" style="position: relative; z-index: 2;">
             <div class="row justify-content-center align-items-center" style="min-height: 400px;">
-                <div class="col-md-8 text-center slider-text" style="color: white;">
+                <div class="col-md-8 text-center slider-text" style="color: black;">
                     <h1 class="mb-3">Benvenuto, <?= htmlspecialchars($user['nome'] ?? 'Admin') ?></h1>
                     <p class="breadcrumbs"><a href="../index.php" style="color: #ccc;">Home</a> <span class="mx-2">&gt;</span> <span>Admin</span></p>
                 </div>
@@ -120,7 +120,19 @@ if ($gruppo !== 'admin') {
                         </div>
                     </div>
                 </div>
-
+            <!-- Colonna 4: Gestione Blog -->
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="flaticon-diet"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading" style="color:#fff;">Gestione Blog</h3>
+                            <p style="color:#fff;">Crea, modifica, o elimina un blog</p>
+                            <p><a href="admin/modifica_blog.php" class="btn btn-primary">Gestisci</a></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
