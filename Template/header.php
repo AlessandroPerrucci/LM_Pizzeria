@@ -68,7 +68,21 @@ if (session_status() === PHP_SESSION_NONE) {
                         <a href="index.php" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
-                        <a href="menu.php" class="nav-link">Menu</a>
+                        <?php if (isset($_SESSION['user'])){
+                            echo '<a href="ordina.php" class="nav-link">Ordina</a>';
+                            
+                        }
+                        else{
+                            echo '<a href="menu.php" class="nav-link">Menu</a>';
+                        }
+                        ?>
+                    </li>
+                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
+                        <?php if (isset($_SESSION['user'])){
+                            echo '<a href="ordini.php" class="nav-link">Stato ordini</a>';
+                            
+                        }
+                        ?>
                     </li>
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'services' ? 'active' : '' ?>">
                         <a href="services.php" class="nav-link">Services</a>
