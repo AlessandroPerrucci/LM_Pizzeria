@@ -1,5 +1,4 @@
-<?php if ($pagina_attiva == 'onedirup'): ?>
-    <?php #logica per caricare blog recenti nel footer 
+ <?php #logica per caricare blog recenti nel footer 
     session_start();
     require_once 'config.php';
 
@@ -44,6 +43,8 @@
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     ?>
+<?php if ($pagina_attiva == 'onedirup'): ?>
+
 
     <footer class="ftco-footer ftco-section img">
         <div class="overlay"></div>
