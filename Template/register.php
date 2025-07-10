@@ -19,36 +19,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($password !== $conferma) {
         $errors[] = "Le password non coincidono.";
     } else {
+        // Verifica se l'email è già registrata
         $stmt = $pdo->prepare("SELECT email FROM utente WHERE email = :email");
         $stmt->execute(['email' => $email]);
         if ($stmt->fetch()) {
             $errors[] = "Questa email è già registrata.";
         } else {
             $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+            // 1. Crea un record in str_preferenze con tutti i valori false
+            $stmt = $pdo->prepare("INSERT INTO str_preferenze (dark_mode, keep_logged, pub) VALUES (0, 0, 0)");
+            $stmt->execute();
+            $pref_id = $pdo->lastInsertId();
+
+            // 2. Inserisce il nuovo utente con riferimento alla str_preferenze
             $insert = $pdo->prepare("
-  INSERT INTO utente (email, nickname, password, str_preferenze, nome, cognome, gruppo, foto_profilo)
-  VALUES (:email, :nickname, :password, :str_preferenze, :nome, :cognome, :gruppo, :foto_profilo)
-");
+                INSERT INTO utente (email, nickname, password, str_preferenze, nome, cognome, gruppo, foto_profilo)
+                VALUES (:email, :nickname, :password, :str_preferenze, :nome, :cognome, :gruppo, :foto_profilo)
+            ");
 
             $insert->execute([
                 'email' => $email,
                 'nickname' => $nickname,
                 'password' => $hashed,
-                'str_preferenze' => -1,
+                'str_preferenze' => $pref_id,
                 'nome' => $nome,
                 'cognome' => $cognome,
                 'gruppo' => 'user',
                 'foto_profilo' => 'images/profilo/default.jpg'
             ]);
 
-            // Recupera l'utente appena creato per salvarlo in sessione
+            // 3. Recupera utente appena registrato
             $stmt = $pdo->prepare("SELECT * FROM utente WHERE email = :email");
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            // 4. Salva l'utente in sessione e reindirizza
             $_SESSION['user'] = $user;
-
-            // Reindirizza al profilo
             header("Location: profilo.php");
             exit;
         }
