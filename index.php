@@ -10,6 +10,44 @@ $stmtSec = $pdo->query("SELECT * FROM secondo");
 $secondi = $stmtSec->fetchAll(PDO::FETCH_ASSOC);
 $stmtBev = $pdo->query("SELECT * FROM bevanda");
 $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
+
+#------------------[Robba per i blog]---------------------------------
+// 6) Query dei post paginati + filtro
+$sql = "SELECT p.*, COUNT(c.id) AS comment_count
+    FROM blog_posts p
+    LEFT JOIN blog_comments c ON p.id = c.post_id
+    $where
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT :limit OFFSET :offset
+    ";
+$limit = isset($limit) ? (int)$limit : 2;
+$offset = isset($offset) ? (int)$offset : 0;
+
+$stmt = $pdo->prepare($sql);
+// bind filtro
+if ($categoryId) {
+	$stmt->bindValue(':category', $categoryId, PDO::PARAM_INT);
+}
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (!isset($pdo)) {
+	echo "<!-- Errore: connessione al database non disponibile -->";
+	return;
+}
+// Recenti per il footer
+$recentStmt = $pdo->prepare("
+    SELECT p.id, p.title, p.content, p.created_at, p.image, p.author, COUNT(c.id) AS comment_count
+    FROM blog_posts p
+    LEFT JOIN blog_comments c ON p.id = c.post_id
+    GROUP BY p.id
+    ORDER BY p.created_at DESC
+    LIMIT 3
+");
+$recentStmt->execute();
+$recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -60,9 +98,9 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 
 					<div class="col-md-6 col-sm-12 ftco-animate">
 						<span class="subheading">Delicious</span>
-						<h1 class="mb-4">Italian Cuizine</h1>
-						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
-						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+						<h1 class="mb-4">Pizza Italiana</h1>
+						<p class="mb-4 mb-md-5">Deliziosa pizza Italiana, prodotta con i migliori prodotti locali, seguendo le ricette originali. </p>
+						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordina ora</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Vedi il Menu</a></p>
 					</div>
 					<div class="col-md-6 ftco-animate">
 						<img src="images/bg_1.png" class="img-fluid" alt="">
@@ -78,10 +116,10 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 				<div class="row slider-text align-items-center" data-scrollax-parent="true">
 
 					<div class="col-md-6 col-sm-12 order-md-last ftco-animate">
-						<span class="subheading">Crunchy</span>
-						<h1 class="mb-4">Italian Pizza</h1>
-						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
-						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+						<span class="subheading">Croccante</span>
+						<h1 class="mb-4">Pizza Italiana</h1>
+						<p class="mb-4 mb-md-5">Deliziosa pizza Italiana, prodotta con i migliori prodotti locali, seguendo le ricette originali.</p>
+						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordina ora</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Vedi il Menu</a></p>
 					</div>
 					<div class="col-md-6 ftco-animate">
 						<img src="images/bg_2.png" class="img-fluid" alt="">
@@ -97,10 +135,10 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 				<div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 					<div class="col-md-7 col-sm-12 text-center ftco-animate">
-						<span class="subheading">Welcome</span>
-						<h1 class="mb-4">We make authentic Italian pizza, kept to the highest standards.</h1>
-						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
-						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+						<span class="subheading">Benvenuti</span>
+						<h1 class="mb-4">Produciamo Pizza Italiana Autentica, mantenendo gli standard più elevati</h1>
+						<p class="mb-4 mb-md-5">Deliziosa pizza Italiana, prodotta con i migliori prodotti locali, seguendo le ricette originali.</p>
+						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Ordina ora</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">Vedi il Menu</a></p>
 					</div>
 
 				</div>
@@ -116,21 +154,21 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-phone"></span></div>
 							<div class="text">
-								<h3>000 (123) 456 7890</h3>
-								<p>Call to book a table</p>
+								<h3>+39 345 571 947 </h3>
+								<p>Prenota un tavolo</p>
 							</div>
 						</div>
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-my_location"></span></div>
 							<div class="text">
-								<h3>198 West 21th Street</h3>
-								<p>Suite 721 New York NY 10016</p>
+								<h3>Via Antonio Cannavacciuolo, 69,</h3>
+								<p>Italia, Napoli, NA, 80125 </p>
 							</div>
 						</div>
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-clock-o"></span></div>
 							<div class="text">
-								<h3>Open All Week</h3>
+								<h3>Aperto tutti i giorni</h3>
 								<p>12:00-15:00, 19:00-23:00</p>
 							</div>
 						</div>
@@ -151,10 +189,10 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 		<div class="one-half img" style="background-image: url(images/about.jpg);"></div>
 		<div class="one-half ftco-animate">
 			<div class="heading-section ftco-animate ">
-				<h2 class="mb-4">Welcome to <span class="flaticon-pizza">L.M Pizzeria</span> A Restaurant</h2>
+				<h2 class="mb-4">Benvenuti a <span class="flaticon-pizza">L.M Pizzeria</span></h2>
 			</div>
 			<div>
-				<p>At our pizzeria, every slice tells a story — crafted with locally sourced ingredients, real Italian recipes, and a passion for flavor. We follow high standards to deliver delicious pizza that's fresh, authentic, and unforgettable. Taste Italy, one bite at a time.</p>
+				<p>Nella nostra pizzeria, ogni fetta racconta una storia: preparata con ingredienti locali, autentiche ricette italiane e passione per il gusto. Seguiamo standard elevati per offrire una pizza deliziosa, fresca, autentica e indimenticabile. Assapora l'Italia, un morso alla volta.</p>
 			</div>
 		</div>
 	</section>
@@ -164,8 +202,8 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 		<div class="container">
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
-					<h2 class="mb-4">Our Services</h2>
-					<p>Want to know what services we offer, or the quality and origin of our products?</p>
+					<h2 class="mb-4">I nostri servizi</h2>
+					<p>Scopri i nostri servizi, e la qualità e origine dei nostri prodotti.</p>
 				</div>
 			</div>
 			<div class="row">
@@ -175,8 +213,8 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 							<span class="flaticon-diet"></span>
 						</div>
 						<div class="media-body">
-							<h3 class="heading">Healthy Foods</h3>
-							<p>We use only the finest ingredients, carefully sourced from local producers to craft our authentic pizzas.</p>
+							<h3 class="heading">Cibo Salutare</h3>
+							<p>Per realizzare le nostre pizze autentiche utilizziamo solo i migliori ingredienti, accuratamente selezionati dai produttori locali.</p>
 						</div>
 					</div>
 				</div>
@@ -186,8 +224,8 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 							<span class="flaticon-bicycle"></span>
 						</div>
 						<div class="media-body">
-							<h3 class="heading">Fastest Delivery</h3>
-							<p>Our dedicated drivers ensure swift delivery, bringing your pizza to you at the perfect temperature: hot, fresh, and ready to enjoy.</p>
+							<h3 class="heading">Consegne rapide</h3>
+							<p> I nostri autisti garantiscono una consegna rapida, portandoti la pizza alla temperatura perfetta: calda, fresca e pronta da gustare.</p>
 						</div>
 					</div>
 				</div>
@@ -195,8 +233,8 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 					<div class="media d-block text-center block-6 services">
 						<div class="icon d-flex justify-content-center align-items-center mb-5"><span class="flaticon-pizza-1"></span></div>
 						<div class="media-body">
-							<h3 class="heading">Original Recipes</h3>
-							<p>Every pizza is crafted using authentic Italian recipes, learned directly from their original masters</p>
+							<h3 class="heading">Ricette Originali</h3>
+							<p>Ongi pizza è prodotto utilizzando vere ed autentiche ricette Italiane, imparate direttamente dai maestri originali.</p>
 						</div>
 					</div>
 				</div>
@@ -208,47 +246,47 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 		<div class="container">
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
-					<h2 class="mb-4">Signature whole pizza</h2>
-					<p>Our signature pizzas are specially crafted by blending authentic techniques learned in Italy with our own creative touch.</p>
+					<h2 class="mb-4">Pizza al piatto</h2>
+					<p>Le nostre pizze sono prodotte combinando autentiche tecniche Italiane aggiungendo la nostra immaginazione.</p>
 				</div>
 			</div>
 		</div>
 		<div class="container-wrap">
 			<div class="row no-gutters d-flex">
 				<?php
-				$cont=0;
+				$cont = 0;
 				foreach ($pizze as $pizza):
-				if($cont>5){
-					break;
-				} ?>
+					if ($cont > 5) {
+						break;
+					} ?>
 					<div class="col-lg-4 d-flex ftco-animate">
 						<div class="services-wrap d-flex">
-						<?php
-						$nomePizza = $pizza['nome']; // dal database
-						$nomeFile = str_replace(' ', '_', $nomePizza);
-						if($cont > 2){
-							echo '<a href="#" class="img order-lg-last" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></a>';
-						}else{
-							echo '<a href="#" class="img" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></a>';
-						}
-						?>
-						<div class="text p-4">
-							<h3><?php echo $pizza['nome']?></h3>
-							<p> <?php echo $pizza['descrizione']?> </p>
-							<p class="price"><span>€<?php echo $pizza['prezzo']?></span> <a href="ordina.php" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
+							<?php
+							$nomePizza = $pizza['nome']; // dal database
+							$nomeFile = str_replace(' ', '_', $nomePizza);
+							if ($cont > 2) {
+								echo '<a href="#" class="img order-lg-last" style="background-image: url(images/FotoPizze/' . $nomeFile . '.jpg);"></a>';
+							} else {
+								echo '<a href="#" class="img" style="background-image: url(images/FotoPizze/' . $nomeFile . '.jpg);"></a>';
+							}
+							?>
+							<div class="text p-4">
+								<h3><?php echo $pizza['nome'] ?></h3>
+								<p> <?php echo $pizza['descrizione'] ?> </p>
+								<p class="price"><span>€<?php echo $pizza['prezzo'] ?></span> <a href="ordina.php" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
+							</div>
 						</div>
 					</div>
-				</div>
 				<?php
-			$cont++;
-			endforeach; ?>
+					$cont++;
+				endforeach; ?>
 			</div>
 		</div>
 
 		<div class="container">
 			<div class="row justify-content-center mb-5 pb-3 mt-5 pt-5">
 				<div class="col-md-7 heading-section text-center ftco-animate">
-					<h2 class="mb-4">Our Menu Pricing</h2>
+					<h2 class="mb-4">Prezzi del menu</h2>
 					<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
 					<p class="mt-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
 				</div>
@@ -256,22 +294,22 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 			<div class="row">
 				<div class="col-md-6">
 					<?php foreach ($pizze as $pizza): ?>
-					<div class="pricing-entry d-flex ftco-animate">
-						<?php
-						$nomePizza = $pizza['nome']; // dal database
-						$nomeFile = str_replace(' ', '_', $nomePizza);
-						echo '<div class="img" style="background-image: url(images/FotoPizze/'.$nomeFile.'.jpg);"></div>'
-						?>
-						<div class="desc pl-3">
-							<div class="d-flex text align-items-center">
-								<h3><span><?php echo $pizza['nome']?></span></h3>
-								<span class="price">€<?php echo $pizza['prezzo']?></span>
-							</div>
-							<div class="d-block">
-								<p><?php echo $pizza['descrizione']?> </p>
+						<div class="pricing-entry d-flex ftco-animate">
+							<?php
+							$nomePizza = $pizza['nome']; // dal database
+							$nomeFile = str_replace(' ', '_', $nomePizza);
+							echo '<div class="img" style="background-image: url(images/FotoPizze/' . $nomeFile . '.jpg);"></div>'
+							?>
+							<div class="desc pl-3">
+								<div class="d-flex text align-items-center">
+									<h3><span><?php echo $pizza['nome'] ?></span></h3>
+									<span class="price">€<?php echo $pizza['prezzo'] ?></span>
+								</div>
+								<div class="d-block">
+									<p><?php echo $pizza['descrizione'] ?> </p>
+								</div>
 							</div>
 						</div>
-					</div>
 					<?php endforeach; ?>
 				</div>
 			</div>
@@ -325,7 +363,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 								<div class="text">
 									<div class="icon"><span class="flaticon-pizza-1"></span></div>
 									<strong class="number" data-number="100">0</strong>
-									<span>Pizza Branches</span>
+									<span>Filiali</span>
 								</div>
 							</div>
 						</div>
@@ -334,7 +372,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 								<div class="text">
 									<div class="icon"><span class="flaticon-medal"></span></div>
 									<strong class="number" data-number="85">0</strong>
-									<span>Number of Awards</span>
+									<span>Numero di premiazioni</span>
 								</div>
 							</div>
 						</div>
@@ -343,7 +381,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 								<div class="text">
 									<div class="icon"><span class="flaticon-laugh"></span></div>
 									<strong class="number" data-number="10567">0</strong>
-									<span>Happy Customer</span>
+									<span>Clienti soddisfatti</span>
 								</div>
 							</div>
 						</div>
@@ -352,7 +390,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 								<div class="text">
 									<div class="icon"><span class="flaticon-chef"></span></div>
 									<strong class="number" data-number="900">0</strong>
-									<span>Staff</span>
+									<span>Membri del personale</span>
 								</div>
 							</div>
 						</div>
@@ -389,18 +427,18 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 										<?php foreach ($contorni as $contorno):
 											$nomeContorno = $contorno['nome']; // dal database
 											$nomeFile = str_replace(' ', '_', $nomeContorno);
-											?>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoContorni/'.$nomeFile.'.jpg);"></a>'; ?>
-												<div class="text">
-													<h3> <?php echo $contorno['nome']?> </h3>
-													<p> <?php echo $contorno['descrizione']?> </p>
-													<p class="price"><span>€ <?php echo $contorno['prezzo']?></span></p>
-													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
+										?>
+											<div class="col-md-4 text-center">
+												<div class="menu-wrap">
+													<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoContorni/' . $nomeFile . '.jpg);"></a>'; ?>
+													<div class="text">
+														<h3> <?php echo $contorno['nome'] ?> </h3>
+														<p> <?php echo $contorno['descrizione'] ?> </p>
+														<p class="price"><span>€ <?php echo $contorno['prezzo'] ?></span></p>
+														<p><a href="ordina.php" class="btn btn-white btn-outline-white">Aggiungi al carrello</a></p>
+													</div>
 												</div>
 											</div>
-										</div>
 										<?php endforeach; ?>
 									</div>
 								</div>
@@ -410,41 +448,41 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 										<?php foreach ($bevande as $bevanda):
 											$nomeBevanda = $bevanda['nome']; // dal database
 											$nomeFile = str_replace(' ', '_', $nomeBevanda);
-											
-											?>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoBevande/'.$nomeFile.'.jpg);"></a>'; ?>
-												<div class="text">
-													<h3> <?php echo $bevanda['nome']?> </h3>
-													<p> <?php echo $bevanda['descrizione']?> </p>
-													<p class="price"><span>€ <?php echo $bevanda['prezzo']?></span></p>
-													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
+
+										?>
+											<div class="col-md-4 text-center">
+												<div class="menu-wrap">
+													<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoBevande/' . $nomeFile . '.jpg);"></a>'; ?>
+													<div class="text">
+														<h3> <?php echo $bevanda['nome'] ?> </h3>
+														<p> <?php echo $bevanda['descrizione'] ?> </p>
+														<p class="price"><span>€ <?php echo $bevanda['prezzo'] ?></span></p>
+														<p><a href="ordina.php" class="btn btn-white btn-outline-white">Aggiungi al carrello</a></p>
+													</div>
 												</div>
 											</div>
-										</div>
 										<?php endforeach; ?>
 									</div>
 								</div>
 
 								<div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
 									<div class="row">
-										<?php foreach ($antipasti as $antipasto): 
+										<?php foreach ($antipasti as $antipasto):
 											$nomeAntipasto = $antipasto['nome']; // dal database
 											$nomeFile = str_replace(' ', '_', $nomeAntipasto);
-											?>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoAntipasti/'.$nomeFile.'.jpg);"></a>' ?>
-												
-												<div class="text">
-													<h3> <?php echo $antipasto['nome']?> </h3>
-													<p> <?php echo $antipasto['descrizione']?> </p>
-													<p class="price"><span>€ <?php echo $antipasto['prezzo']?></span></p>
-													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
+										?>
+											<div class="col-md-4 text-center">
+												<div class="menu-wrap">
+													<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoAntipasti/' . $nomeFile . '.jpg);"></a>' ?>
+
+													<div class="text">
+														<h3> <?php echo $antipasto['nome'] ?> </h3>
+														<p> <?php echo $antipasto['descrizione'] ?> </p>
+														<p class="price"><span>€ <?php echo $antipasto['prezzo'] ?></span></p>
+														<p><a href="ordina.php" class="btn btn-white btn-outline-white">Aggiungi al carrello</a></p>
+													</div>
 												</div>
 											</div>
-										</div>
 										<?php endforeach; ?>
 									</div>
 								</div>
@@ -454,19 +492,19 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 										<?php foreach ($secondi as $secondo):
 											$nomeSecondo = $secondo['nome']; // dal database
 											$nomeFile = str_replace(' ', '_', $nomeSecondo);
-											
-											?>
-										<div class="col-md-4 text-center">
-											<div class="menu-wrap">
-												<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoSecondi/'.$nomeFile.'.jpg);"></a>'; ?>
-												<div class="text">
-													<h3> <?php echo $secondo['nome']?> </h3>
-													<p> <?php echo $secondo['descrizione']?> </p>
-													<p class="price"><span>€ <?php echo $secondo['prezzo']?></span></p>
-													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
+
+										?>
+											<div class="col-md-4 text-center">
+												<div class="menu-wrap">
+													<?php echo '<a href="#" class="menu-img img mb-4" style="background-image: url(images/FotoSecondi/' . $nomeFile . '.jpg);"></a>'; ?>
+													<div class="text">
+														<h3> <?php echo $secondo['nome'] ?> </h3>
+														<p> <?php echo $secondo['descrizione'] ?> </p>
+														<p class="price"><span>€ <?php echo $secondo['prezzo'] ?></span></p>
+														<p><a href="ordina.php" class="btn btn-white btn-outline-white">Aggiungi al carrello</a></p>
+													</div>
 												</div>
 											</div>
-										</div>
 										<?php endforeach; ?>
 									</div>
 								</div>
@@ -482,57 +520,31 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 		<div class="container">
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
-					<h2 class="mb-4">Recent from blog</h2>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					<h2 class="mb-4">Blog recenti</h2>
+					<p>Rimani aggiornate con i nostri blog, o scopri qualcosa di nuovo sul mondo della pizza!</p>
 				</div>
 			</div>
 			<div class="row d-flex">
-				<div class="col-md-4 d-flex ftco-animate">
-					<div class="blog-entry align-self-stretch">
-						<a href="blog-single.php" class="block-20" style="background-image: url('images/image_1.jpg');">
-						</a>
-						<div class="text py-4 d-block">
-							<div class="meta">
-								<div><a href="#">Sept 10, 2018</a></div>
-								<div><a href="#">Admin</a></div>
-								<div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+				<?php foreach ($recentPosts as $post): ?>
+					<div class="col-md-4 d-flex ftco-animate">
+						<div class="blog-entry align-self-stretch">
+							<a href="blog-single.php?id=<?= $post['id'] ?>" class="block-20" style="background-image: url('<?= htmlspecialchars($post['image']) ?>');">
+							</a>
+							<div class="text py-4 d-block">
+								<div class="meta">
+									<div><a href="#"><?= date('M j, Y', strtotime($post['created_at'])) ?></a></div>
+									<div><a href="#"><?= htmlspecialchars($post['author']) ?></a></div>
+									<div><a href="#" class="meta-chat"><span class="icon-chat"></span> <?= $post['comment_count'] ?></a></div>
+								</div>
+								<h3 class="heading mt-2"><a href="blog-single.php?id=<?= $post['id'] ?>"><?= htmlspecialchars($post['title']) ?></a></h3>
+								<p><?= substr(strip_tags($post['content'] ?? ''), 0, 100) ?>...</p>
 							</div>
-							<h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-							<p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-4 d-flex ftco-animate">
-					<div class="blog-entry align-self-stretch">
-						<a href="blog-single.php" class="block-20" style="background-image: url('images/image_2.jpg');">
-						</a>
-						<div class="text py-4 d-block">
-							<div class="meta">
-								<div><a href="#">Sept 10, 2018</a></div>
-								<div><a href="#">Admin</a></div>
-								<div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-							</div>
-							<h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-							<p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 d-flex ftco-animate">
-					<div class="blog-entry align-self-stretch">
-						<a href="blog-single.php" class="block-20" style="background-image: url('images/image_3.jpg');">
-						</a>
-						<div class="text py-4 d-block">
-							<div class="meta">
-								<div><a href="#">Sept 10, 2018</a></div>
-								<div><a href="#">Admin</a></div>
-								<div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-							</div>
-							<h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-							<p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-						</div>
-					</div>
-				</div>
+				<?php endforeach; ?>
 			</div>
+		</div>
+		</div>
 		</div>
 	</section>
 
