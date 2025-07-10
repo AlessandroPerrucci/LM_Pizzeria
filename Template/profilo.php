@@ -6,6 +6,32 @@ if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit;
 }
+$user = $_SESSION['user'];
+$email = $user['email'];
+
+// Verifica se l'utente ha -1 in str_preferenze
+if ((int)$user['str_preferenze'] === -1) {
+    $pdo->prepare("INSERT INTO str_preferenze (dark_mode, keep_logged, pub) VALUES (0, 0, 0)")->execute();
+    $new_id = $pdo->lastInsertId();
+
+    // aggiorna utente
+    $pdo->prepare("UPDATE utente SET str_preferenze = :id WHERE email = :email")->execute([
+        'id' => $new_id,
+        'email' => $email
+    ]);
+
+    // aggiorna sessione
+    $user['str_preferenze'] = $new_id;
+    $_SESSION['user']['str_preferenze'] = $new_id;
+}
+
+// Recupera le pizze disponibili
+$stmt = $pdo->query("SELECT nome FROM pizza WHERE disponibile = 1 ORDER BY nome ASC");
+$pizze = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt = $pdo->prepare("SELECT * FROM str_preferenze WHERE id = :id");
+$stmt->execute(['id' => $user['str_preferenze']]);
+$preferenze = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $utente_email = $_SESSION['user']['email'];
 $errors = [];
@@ -64,15 +90,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($nickname === '' || $nome === '' || $cognome === '') {
         $errors[] = "Nickname, Nome e Cognome sono obbligatori.";
     } else {
+        $favorite_pizza = trim($_POST['favorite_pizza'] ?? null);
+
         $update = $pdo->prepare("UPDATE utente 
-          SET nickname = :nickname, nome = :nome, cognome = :cognome, bio = :bio 
-          WHERE email = :email");
+  SET nickname = :nickname, nome = :nome, cognome = :cognome, bio = :bio, favorite_pizza = :favorite_pizza 
+  WHERE email = :email");
+
         $update->execute([
             'nickname' => $nickname,
-            'nome'     => $nome,
-            'cognome'  => $cognome,
-            'bio'      => $bio,
-            'email'    => $utente_email
+            'nome' => $nome,
+            'cognome' => $cognome,
+            'bio' => $bio,
+            'favorite_pizza' => $favorite_pizza,
+            'email' => $utente_email
         ]);
         $success = true;
 
@@ -80,12 +110,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user']['nickname'] = $nickname;
         $_SESSION['user']['nome'] = $nome;
         $_SESSION['user']['cognome'] = $cognome;
+        $_SESSION['user']['favorite_pizza'] = $favorite_pizza;
+
 
         // Ricarica i dati aggiornati dal DB
         $stmt = $pdo->prepare("SELECT * FROM utente WHERE email = :email");
         $stmt->execute(['email' => $utente_email]);
         $utente = $stmt->fetch(PDO::FETCH_ASSOC);
     }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salva_preferenze'])) {
+    $stmt = $pdo->prepare("
+        UPDATE str_preferenze 
+        SET dark_mode = :dark_mode, keep_logged = :keep_logged, pub = :pub 
+        WHERE id = :id
+    ");
+    $stmt->execute([
+        'dark_mode' => isset($_POST['dark_mode']) ? 1 : 0,
+        'keep_logged' => isset($_POST['keep_logged']) ? 1 : 0,
+        'pub' => isset($_POST['pub']) ? 1 : 0,
+        'id' => $user['str_preferenze']
+    ]);
+
+    $_SESSION['flash'] = ['tipo' => 'success', 'testo' => 'Preferenze aggiornate con successo.'];
+    header("Location: profilo.php");
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -123,14 +173,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/stile_personalizzato.css">
 </head>
 
-<body>
+<body class="<?= $preferenze['dark_mode'] ? 'dark-mode' : '' ?>">
 
     <?php $pagina_attiva = ''; ?>
     <?php include 'header.php'; ?>
 
     <div class="container mt-5">
-        <div class="form-profilo">
-            <h2 class="text-center mb-4" style="color: #212529 !important;">Il tuo profilo</h2>
+        <div class="form-profilo" style="<?= $preferenze['dark_mode'] ? 'color:rgb(255, 255, 255) !important; background-color: black !important;' : 'color: #212529 !important; background-color: white !important; ' ?>">
+            <h2 class="text-center mb-4" style="<?= $preferenze['dark_mode'] ? 'color:rgb(255, 255, 255) !important;' : 'color: #212529 !important;' ?>">Il tuo profilo</h2>
 
             <div class="text-center mb-4">
                 <?php if (!empty($utente['foto_profilo']) && file_exists($utente['foto_profilo'])): ?>
@@ -160,37 +210,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form method="post" enctype="multipart/form-data">
                     <!-- Campo Email: solo visualizzazione -->
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email: <?= htmlspecialchars($utente['email']) ?></label>
+                        <label for="email" class="form-label" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Email: <?= htmlspecialchars($utente['email']) ?></label>
                     </div>
 
                     <!-- Campo Nickname: modificabile -->
                     <div class="mb-3">
-                        <label for="nickname" class="form-label">Nickname</label>
+                        <label for="nickname" class="form-label" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Nickname</label>
                         <input type="text" name="nickname" class="form-control" id="nickname"
                             value="<?= htmlspecialchars($utente['nickname']) ?>" required
-                            style="border:1px solid !important;background-color: #e9ecef; color: #212529 !important;">
+                            style="<?= $preferenze['dark_mode'] ? 'border:1px solid white !important; background-color: #212529; color: #e9ecef !important;' : 'border:1px solid black !important; background-color: #e9ecef; color: #212529 !important;' ?>">
                     </div>
 
                     <div class="mb-3">
-                        <label for="nome" class="form-label">Nome</label>
+                        <label for="nome" class="form-label" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Nome</label>
                         <input type="text" name="nome" id="nome" class="form-control"
                             value="<?= htmlspecialchars($utente['nome']) ?>" required
-                            style="border:1px solid !important;background-color: #e9ecef; color: #212529 !important;">
+                            style="<?= $preferenze['dark_mode'] ? 'border:1px solid white !important; background-color: #212529; color: #e9ecef !important;' : 'border:1px solid black !important; background-color: #e9ecef; color: #212529 !important;' ?>">
                     </div>
 
                     <div class="mb-3">
-                        <label for="cognome" class="form-label">Cognome</label>
+                        <label for="cognome" class="form-label" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Cognome</label>
                         <input type="text" name="cognome" id="cognome" class="form-control"
                             value="<?= htmlspecialchars($utente['cognome']) ?>" required
-                            style="border:1px solid !important;background-color: #e9ecef; color: #212529 !important;">
+                            style="<?= $preferenze['dark_mode'] ? 'border:1px solid white !important; background-color: #212529; color: #e9ecef !important;' : 'border:1px solid black !important; background-color: #e9ecef; color: #212529 !important;' ?>">
+                    </div>
+                    <!-- Scelta Pizza Preferita -->
+                    <div class="mb-3">
+                        <label for="favorite_pizza" class="form-label" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Pizza Preferita</label>
+                        <select class="form-control" name="favorite_pizza" id="favorite_pizza" style="border-radius: 10px;<?= $preferenze['dark_mode'] ? 'border:1px solid white !important; background-color: #212529; color: #e9ecef !important;' : 'border:1px solid black !important; background-color: #e9ecef; color: #212529 !important;' ?>">
+                            <option value="" style="<?= $preferenze['dark_mode'] ? 'border:1px solid white !important; background-color: #212529; color: #e9ecef !important;' : 'border:1px solid black !important; background-color: #e9ecef; color: #212529 !important;' ?>">-- Seleziona --</option>
+                            <?php foreach ($pizze as $pizza): ?>
+                                <option style="<?= $preferenze['dark_mode'] ? 'border:1px solid white !important; background-color: #212529; color: #e9ecef !important;' : 'border:1px solid black !important; background-color: #e9ecef; color: #212529 !important;' ?>" value="<?= htmlspecialchars($pizza['nome']) ?>" <?= $utente['favorite_pizza'] === $pizza['nome'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($pizza['nome']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
+
+
                     <div class="mb-3">
-                        <label for="bio" class="form-label">Bio</label>
-                        <textarea name="bio" id="bio" class="form-control" rows="3" style="border:1px solid !important;background-color: #e9ecef; color: #212529 !important;"><?= htmlspecialchars($utente['bio']) ?></textarea>
+                        <label for="bio" class="form-label" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Bio</label>
+                        <textarea name="bio" id="bio" class="form-control" rows="3" style="<?= $preferenze['dark_mode'] ? 'border:1px solid white !important; background-color: #212529; color: #e9ecef !important;' : 'border:1px solid black !important; background-color: #e9ecef; color: #212529 !important;' ?>"><?= htmlspecialchars($utente['bio']) ?></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="foto" class="form-label d-block">Modifica foto profilo</label>
+                        <label for="foto" class="form-label d-block" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Modifica foto profilo</label>
 
                         <!-- Label che funge da pulsante -->
                         <label for="foto" class="btn btn-custom-warning text-center" style="width: 200px;">
@@ -210,6 +274,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="text-center" style="margin-top: 15px !important;">
                 <a href="logout.php" class="btn-logout">Logout</a>
             </div>
+            <?php if (isset($preferenze)): ?>
+                <div class="container mt-5" style="<?= $preferenze['dark_mode'] ? 'color:rgb(255, 255, 255) !important; background-color: black !important;' : 'color: #212529 !important; background-color: white !important; ' ?>">
+                    <h4 class="mb-3" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Preferenze Profilo</h4>
+                    <form method="POST">
+                        <div class="form-check text-white">
+                            <input class="form-check-input" type="checkbox" name="dark_mode" id="dark_mode" <?= $preferenze['dark_mode'] ? 'checked' : '' ?>>
+                            <label class="form-check-label" for="dark_mode" style="<?= $preferenze['dark_mode'] ? 'color: #e9ecef !important;' : 'color: #212529 !important;' ?>">Modalità scura</label>
+                        </div>
+                        <button type="submit" name="salva_preferenze" class="btn-custom-warning mt-2">Salva Preferenze</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -231,6 +308,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <?php include 'footer.php'; ?>
+    <script>
+        function selezionaPizza(nome) {
+            document.getElementById('favorite_pizza').value = nome;
+            document.getElementById('dropdownPizza').textContent = nome;
+        }
+    </script>
 </body>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-migrate-3.0.1.min.js"></script>
