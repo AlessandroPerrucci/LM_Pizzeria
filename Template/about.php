@@ -68,7 +68,7 @@
 							<div class="icon"><span class="icon-phone"></span></div>
 							<div class="text">
 								<h3>000 (123) 456 7890</h3>
-								<p>A small river named Duden flows</p>
+								<p>Call to book a table</p>
 							</div>
 						</div>
 						<div class="col-md-4 d-flex ftco-animate">
@@ -82,7 +82,7 @@
 							<div class="icon"><span class="icon-clock-o"></span></div>
 							<div class="text">
 								<h3>Open Monday-Friday</h3>
-								<p>8:00am - 9:00pm</p>
+								<p>12:00-15:00, 19:00-23:00</p>
 							</div>
 						</div>
 					</div>

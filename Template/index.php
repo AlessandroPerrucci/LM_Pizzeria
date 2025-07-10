@@ -62,7 +62,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 						<span class="subheading">Delicious</span>
 						<h1 class="mb-4">Italian Cuizine</h1>
 						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
-						<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
 					</div>
 					<div class="col-md-6 ftco-animate">
 						<img src="images/bg_1.png" class="img-fluid" alt="">
@@ -81,7 +81,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 						<span class="subheading">Crunchy</span>
 						<h1 class="mb-4">Italian Pizza</h1>
 						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
-						<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
 					</div>
 					<div class="col-md-6 ftco-animate">
 						<img src="images/bg_2.png" class="img-fluid" alt="">
@@ -100,7 +100,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 						<span class="subheading">Welcome</span>
 						<h1 class="mb-4">We make authentic Italian pizza, kept to the highest standards.</h1>
 						<p class="mb-4 mb-md-5">Delicious pizza hand made with localy purchased products, Following Real Italian recipes.</p>
-						<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+						<p><a href="ordina.php" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="menu.php" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
 					</div>
 
 				</div>
@@ -130,8 +130,8 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-clock-o"></span></div>
 							<div class="text">
-								<h3>Open Monday-Friday</h3>
-								<p>8:00am - 9:00pm</p>
+								<h3>Open All Week</h3>
+								<p>12:00-15:00, 19:00-23:00</p>
 							</div>
 						</div>
 					</div>
@@ -397,7 +397,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 													<h3> <?php echo $contorno['nome']?> </h3>
 													<p> <?php echo $contorno['descrizione']?> </p>
 													<p class="price"><span>€ <?php echo $contorno['prezzo']?></span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
+													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
@@ -419,7 +419,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 													<h3> <?php echo $bevanda['nome']?> </h3>
 													<p> <?php echo $bevanda['descrizione']?> </p>
 													<p class="price"><span>€ <?php echo $bevanda['prezzo']?></span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
+													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
@@ -441,7 +441,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 													<h3> <?php echo $antipasto['nome']?> </h3>
 													<p> <?php echo $antipasto['descrizione']?> </p>
 													<p class="price"><span>€ <?php echo $antipasto['prezzo']?></span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
+													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
@@ -463,7 +463,7 @@ $bevande = $stmtBev->fetchAll(PDO::FETCH_ASSOC);
 													<h3> <?php echo $secondo['nome']?> </h3>
 													<p> <?php echo $secondo['descrizione']?> </p>
 													<p class="price"><span>€ <?php echo $secondo['prezzo']?></span></p>
-													<p><a href="#" class="btn btn-white btn-outline-white">Add to cart</a></p>
+													<p><a href="ordina.php" class="btn btn-white btn-outline-white">Add to cart</a></p>
 												</div>
 											</div>
 										</div>
