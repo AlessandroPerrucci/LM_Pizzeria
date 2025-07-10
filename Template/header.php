@@ -7,13 +7,13 @@ if (session_status() === PHP_SESSION_NONE) {
 <!-- onedirup serve per tutte quelle pagine annidate una directory sopra template, ad esempio la dir admin-->
 <?php if ($pagina_attiva == 'onedirup'): ?>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-        <div class="container">
-            <a class="navbar-brand" href="index.php"><span class="flaticon-pizza-1 mr-1"></span>L.M.<br><small>Pizzeria</small></a>
+        <div class="container-fluid px-3">
+            <a class="navbar-brand me-auto" href="index.php"><span class="flaticon-pizza-1 mr-1"></span>L.M.<br><small>Pizzeria</small></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
             <div class="collapse navbar-collapse" id="ftco-nav">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a href="../index.php" class="nav-link">Home</a></li>
                     <li class="nav-item"><a href="../menu.php" class="nav-link">Menu</a></li>
                     <li class="nav-item"><a href="../services.php" class="nav-link">Services</a></li>
@@ -25,7 +25,8 @@ if (session_status() === PHP_SESSION_NONE) {
                             Recensioni
                         </a>
                     </li>
-
+                </ul>
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item d-flex align-items-center">
                         <?php if (isset($_SESSION['user']) && ($_SESSION['user']['gruppo'] ?? '') === 'admin'): ?>
                             <a href="../admin.php" class="btn btn-primary mr-2">Admin</a>
@@ -53,8 +54,8 @@ if (session_status() === PHP_SESSION_NONE) {
     </nav>
 <?php else: ?>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand me-auto" href="index.php">
                 <span class="flaticon-pizza-1 mr-1"></span>L.M.<br><small>Pizzeria</small>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
@@ -63,7 +64,7 @@ if (session_status() === PHP_SESSION_NONE) {
             </button>
 
             <div class="collapse navbar-collapse" id="ftco-nav">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'home' ? 'active' : '' ?>">
                         <a href="index.php" class="nav-link">Home</a>
                     </li>
@@ -80,6 +81,13 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
                         <?php if (isset($_SESSION['user'])){
                             echo '<a href="ordini.php" class="nav-link">Stato ordini</a>';
+                            
+                        }
+                        ?>
+                    </li>
+                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
+                        <?php if (isset($_SESSION['user'])){
+                            echo '<a href="prenotaTavolo.php" class="nav-link">Prenota Tavolo</a>';
                             
                         }
                         ?>
@@ -101,6 +109,8 @@ if (session_status() === PHP_SESSION_NONE) {
                             Recensioni
                         </a>
                     </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item d-flex align-items-center">
                         <?php if (isset($_SESSION['user']) && ($_SESSION['user']['gruppo'] ?? '') === 'admin'): ?>
                             <a href="admin.php" class="btn btn-primary mr-2">Admin</a>
