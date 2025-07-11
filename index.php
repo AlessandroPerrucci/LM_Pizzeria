@@ -288,7 +288,7 @@ $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 				<div class="col-md-7 heading-section text-center ftco-animate">
 					<h2 class="mb-4">Prezzi del menu</h2>
 					<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
-					<p class="mt-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					<p class="mt-5">Verifica online il prezzo del tuo ordine.</p>
 				</div>
 			</div>
 			<div class="row">
@@ -521,7 +521,7 @@ $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
 					<h2 class="mb-4">Blog recenti</h2>
-					<p>Rimani aggiornate con i nostri blog, o scopri qualcosa di nuovo sul mondo della pizza!</p>
+					<p>Rimani aggiornato con i nostri blog, o scopri qualcosa di nuovo sul mondo della pizza!</p>
 				</div>
 			</div>
 			<div class="row d-flex">
@@ -557,7 +557,7 @@ $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 					<div id="map"></div>
 				</div>
 				<div class="col-md-6 appointment ftco-animate">
-					<h3 class="mb-3">Contact Us</h3>
+					<h3 class="mb-3">Contattaci </h3>
 					<form action="#" class="appointment-form">
 						<div class="d-md-flex">
 							<div class="form-group">

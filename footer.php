@@ -53,8 +53,8 @@ if (!function_exists('generateExcerpt')) {
         <div class="row mb-5">
             <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">About Us</h2>
-                    <p>Artisans of authentic pizza, blending traditional Italian recipes with the finest local ingredients. Each pizza is handcrafted with passion, delivering generations of Italian tradition in every bite.</p>
+                    <h2 class="ftco-heading-2">Chi Siamo</h2>
+                    <p>Artigiani della pizza autentica, che uniscono le ricette tradizionali italiane ai migliori ingredienti locali. Ogni pizza è preparata a mano con passione, racchiudendo generazioni di tradizione italiana in ogni morso.</p>
                     <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                         <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                         <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
@@ -64,7 +64,7 @@ if (!function_exists('generateExcerpt')) {
             </div>
             <div class="col-lg-4 col-md-6 mb-5 mb-md-5">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Recent Blog</h2>
+                    <h2 class="ftco-heading-2">Blog recenti</h2>
                     <?php foreach ($recentPosts as $r): ?>
                         <div class="block-21 mb-4 d-flex">
                             <a
@@ -100,21 +100,21 @@ if (!function_exists('generateExcerpt')) {
                 <div class="ftco-footer-widget mb-4 ml-md-4">
                     <h2 class="ftco-heading-2">Services</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="py-2 d-block">Cooked</a></li>
-                        <li><a href="#" class="py-2 d-block">Deliver</a></li>
-                        <li><a href="#" class="py-2 d-block">Quality Foods</a></li>
-                        <li><a href="#" class="py-2 d-block">Mixed</a></li>
+                        <li><a href="#" class="py-2 d-block">Cucina</a></li>
+                        <li><a href="#" class="py-2 d-block">Consegne</a></li>
+                        <li><a href="#" class="py-2 d-block">Qualità dei prodotti</a></li>
+                        <li><a href="#" class="py-2 d-block">Misto</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Have a Questions?</h2>
+                    <h2 class="ftco-heading-2">Hai delle domande?</h2>
                     <div class="block-23 mb-3">
                         <ul>
-                            <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-                            <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-                            <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+                            <li><span class="icon icon-map-marker"></span><span class="text">Via Antonio Cannavacciuolo, 69, Italia, Napoli, NA, 80125</span></li>
+                            <li><a href="#"><span class="icon icon-phone"></span><span class="text">+39 345 571 947</span></a></li>
+                            <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@LMPizza.com</span></a></li>
                         </ul>
                     </div>
                 </div>
