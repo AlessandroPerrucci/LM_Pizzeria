@@ -80,7 +80,7 @@ $recensioni = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <?php $pagina_attiva = ''; ?>
+    <?php $pagina_attiva = 'recensioni'; ?>
     <?php include 'header.php'; ?>
 
     <section class="slider-item" style="background-image: url('images/bg_3.jpg'); min-height: 300px; position: relative;">
