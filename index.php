@@ -168,7 +168,7 @@ $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-clock-o"></span></div>
 							<div class="text">
-								<h3>Aperto tutti i giorni</h3>
+								<h3>Aperti tutti i giorni</h3>
 								<p>12:00-15:00, 19:00-23:00</p>
 							</div>
 						</div>

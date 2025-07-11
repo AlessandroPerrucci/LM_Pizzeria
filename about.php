@@ -49,8 +49,8 @@
 				<div class="row slider-text justify-content-center align-items-center">
 
 					<div class="col-md-7 col-sm-12 text-center ftco-animate">
-						<h1 class="mb-3 mt-5 bread">About</h1>
-						<p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>About</span></p>
+						<h1 class="mb-3 mt-5 bread">Chi siamo</h1>
+						<p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>Chi siamo</span></p>
 					</div>
 
 				</div>
@@ -67,22 +67,22 @@
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-phone"></span></div>
 							<div class="text">
-								<h3>000 (123) 456 7890</h3>
+								<h3>+39 345 571 947</h3>
 								<p>A small river named Duden flows</p>
 							</div>
 						</div>
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-my_location"></span></div>
 							<div class="text">
-								<h3>198 West 21th Street</h3>
-								<p>Suite 721 New York NY 10016</p>
+								<h3>Via Antonio Cannavacciuolo, 69</h3>
+								<p>Italia, Napoli, NA, 80125</p>
 							</div>
 						</div>
 						<div class="col-md-4 d-flex ftco-animate">
 							<div class="icon"><span class="icon-clock-o"></span></div>
 							<div class="text">
-								<h3>Open Monday-Friday</h3>
-								<p>8:00am - 9:00pm</p>
+								<h3>Aperti tutti i giorni</h3>
+								<p>12:00-15:00, 19:00-23:00</p>
 							</div>
 						</div>
 					</div>
@@ -102,10 +102,10 @@
 		<div class="one-half img" style="background-image: url(images/about.jpg);"></div>
 		<div class="one-half ftco-animate">
 			<div class="heading-section ftco-animate ">
-				<h2 class="mb-4">Welcome to <span class="flaticon-pizza">Pizza</span> A Restaurant</h2>
+				<h2 class="mb-4">Welcome to <span class="flaticon-pizza">L.M Pizzeria</span></h2>
 			</div>
 			<div>
-				<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
+				<p>Da L.M Pizzeria portiamo in tavola l’anima della vera pizza italiana. Le nostre ricette si ispirano alla tradizione autentica, realizzate con ingredienti locali e stagionali, selezionati con cura. Ogni pizza racconta una storia di gusto, semplicità e passione.</p>
 			</div>
 		</div>
 	</section>
@@ -114,9 +114,9 @@
 		<div class="container">
 			<div class="row justify-content-center mb-5 pb-3">
 				<div class="col-md-7 heading-section ftco-animate text-center">
-					<h2 class="mb-4">Our Chef</h2>
+					<h2 class="mb-4">I nostri chef</h2>
 					<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
-					<p class="mt-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					<p class="mt-5">Il cuore della nostra cucina batte nelle mani dei nostri chef: esperti, creativi e innamorati della tradizione. Con anni di esperienza e un’attenzione maniacale per la qualità, trasformano ogni impasto in un’opera d’arte fragrante, fedele alla vera scuola italiana della pizza.</p>
 				</div>
 			</div>
 			<div class="row">
@@ -124,10 +124,10 @@
 					<div class="staff">
 						<div class="img mb-4" style="background-image: url(images/person_1.jpg);"></div>
 						<div class="info text-center">
-							<h3><a href="teacher-single.php">Tom Smith</a></h3>
-							<span class="position">Hair Specialist</span>
+							<h3><a href="teacher-single.php">Katalin Contrada</a></h3>
+							<span class="position">Specialista della pizza</span>
 							<div class="text">
-								<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								<p>Con tecnica raffinata e gusto impeccabile, Katalin crea pizze che fondono tradizione e originalità. Ogni impasto è frutto di precisione e passione.</p>
 							</div>
 						</div>
 					</div>
@@ -136,34 +136,34 @@
 					<div class="staff">
 						<div class="img mb-4" style="background-image: url(images/person_2.jpg);"></div>
 						<div class="info text-center">
-							<h3><a href="teacher-single.php">Mark Wilson</a></h3>
-							<span class="position">Beard Specialist</span>
+							<h3><a href="teacher-single.php">Marco Aurelio</a></h3>
+							<span class="position">Specialista dei cocktail</span>
 							<div class="text">
-								<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								<p>Con stile e creatività, Marco trasforma ogni drink in un’esperienza. I suoi cocktail accompagnano perfettamente le nostre pizze, esaltandone i sapori.</p>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-3 d-flex mb-sm-4 ftco-animate">
 					<div class="staff">
-						<div class="img mb-4" style="background-image: url(images/person_3.jpg);"></div>
+						<div class="img mb-4" style="background-image: url(images/Luigi.png);"></div>
 						<div class="info text-center">
-							<h3><a href="teacher-single.php">Patrick Jacobson</a></h3>
-							<span class="position">Hair Stylist</span>
+							<h3><a href="teacher-single.php">Luigi Luceforte</a></h3>
+							<span class="position">Il Proprietario</span>
 							<div class="text">
-								<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								<p>Fondatore e anima della pizzeria, Luigi custodisce le ricette originali della tradizione partenopea, mantenendo alta la qualità in ogni dettaglio.</p>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-3 d-flex mb-sm-4 ftco-animate">
 					<div class="staff">
-						<div class="img mb-4" style="background-image: url(images/person_4.jpg);"></div>
+						<div class="img mb-4" style="background-image: url(images/Cesare.png);"></div>
 						<div class="info text-center">
-							<h3><a href="teacher-single.php">Ivan Dorchsner</a></h3>
-							<span class="position">Beard Specialist</span>
+							<h3><a href="teacher-single.php">Cesare Cesaroni</a></h3>
+							<span class="position">Maestro pizzaiolo</span>
 							<div class="text">
-								<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								<p>Esperto nei classici Romani, Cesare è il volto della pizza verace: croccante, saporita e sempre fatta con amore per la tradizione.</p>
 							</div>
 						</div>
 					</div>
@@ -184,7 +184,7 @@
 								<div class="text">
 									<div class="icon"><span class="flaticon-pizza-1"></span></div>
 									<strong class="number" data-number="100">0</strong>
-									<span>Pizza Branches</span>
+									<span>Filiali</span>
 								</div>
 							</div>
 						</div>
@@ -193,7 +193,7 @@
 								<div class="text">
 									<div class="icon"><span class="flaticon-medal"></span></div>
 									<strong class="number" data-number="85">0</strong>
-									<span>Number of Awards</span>
+									<span>Numero di premiazioni</span>
 								</div>
 							</div>
 						</div>
@@ -202,7 +202,7 @@
 								<div class="text">
 									<div class="icon"><span class="flaticon-laugh"></span></div>
 									<strong class="number" data-number="10567">0</strong>
-									<span>Happy Customer</span>
+									<span>Clienti soddisfatti</span>
 								</div>
 							</div>
 						</div>
@@ -211,7 +211,7 @@
 								<div class="text">
 									<div class="icon"><span class="flaticon-chef"></span></div>
 									<strong class="number" data-number="900">0</strong>
-									<span>Staff</span>
+									<span>Membri del personale</span>
 								</div>
 							</div>
 						</div>
@@ -230,23 +230,23 @@
 					<div id="map"></div>
 				</div>
 				<div class="col-md-6 appointment ftco-animate">
-					<h3 class="mb-3">Contact Us</h3>
+					<h3 class="mb-3">Contattaci</h3>
 					<form action="#" class="appointment-form">
 						<div class="d-md-flex">
 							<div class="form-group">
-								<input type="text" class="form-control" placeholder="First Name">
+								<input type="text" class="form-control" placeholder="Nome">
 							</div>
 						</div>
 						<div class="d-me-flex">
 							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Last Name">
+								<input type="text" class="form-control" placeholder="Cognome">
 							</div>
 						</div>
 						<div class="form-group">
-							<textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Message"></textarea>
+							<textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Messaggio"></textarea>
 						</div>
 						<div class="form-group">
-							<input type="submit" value="Send" class="btn btn-primary py-3 px-4">
+							<input type="submit" value="Invio" class="btn btn-primary py-3 px-4">
 						</div>
 					</form>
 				</div>
