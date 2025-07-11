@@ -100,7 +100,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li class="nav-item <?= ($pagina_attiva ?? '') === 'home' ? 'active' : '' ?>">
                         <a href="index.php" class="nav-link">Home</a>
                     </li>
-                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
+                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'ordina' || ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
                         <?php if (isset($_SESSION['user'])){
                             echo '<a href="ordina.php" class="nav-link">Ordina</a>';
                             
@@ -110,14 +110,14 @@ if (session_status() === PHP_SESSION_NONE) {
                         }
                         ?>
                     </li>
-                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
+                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'ordini' ? 'active' : '' ?>">
                         <?php if (isset($_SESSION['user']) && !(($_SESSION['user']['gruppo'] ?? '') === 'admin')){
                             echo '<a href="ordini.php" class="nav-link">Stato ordini</a>';
                             
                         }
                         ?>
                     </li>
-                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'menu' ? 'active' : '' ?>">
+                    <li class="nav-item <?= ($pagina_attiva ?? '') === 'prenota' ? 'active' : '' ?>">
                         <?php if (isset($_SESSION['user']) && !(($_SESSION['user']['gruppo'] ?? '') === 'admin')){
                             echo '<a href="prenotaTavolo.php" class="nav-link">Prenota Tavolo</a>';
                             
