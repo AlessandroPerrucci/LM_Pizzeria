@@ -226,9 +226,6 @@
 		<div class="overlay"></div>
 		<div class="container-wrap">
 			<div class="row no-gutters d-md-flex align-items-center">
-				<div class="col-md-6 d-flex align-self-stretch">
-					<div id="map"></div>
-				</div>
 				<div class="col-md-6 appointment ftco-animate">
 					<h3 class="mb-3">Contattaci</h3>
 					<form action="#" class="appointment-form">
