@@ -127,7 +127,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="row slider-text justify-content-center align-items-center">
 
           <div class="col-md-7 col-sm-12 text-center ftco-animate">
-            <h1 class="mb-3 mt-5 bread">Read our Blog</h1>
+            <h1 class="mb-3 mt-5 bread">Leggi il nostro Blog</h1>
             <p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>Blog</span></p>
           </div>
         </div>
@@ -140,15 +140,15 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Titolo sezione -->
     <div class="row justify-content-center mb-5 pb-3">
       <div class="col-md-7 heading-section ftco-animate text-center">
-        <h2 class="mb-4">Blog posts</h2>
-        <p>Remain updated with all our latest news, and learn something new about Italian Cooking.</p>
+        <h2 class="mb-4">Blog recenti</h2>
+        <p>Rimani aggiornato sulle nostre notizie, oppure scopri qualcosa di nuovo sulla pizza con il nostro blog!</p>
       </div>
     </div>
     <!-- Logica per limitare blog in base alla categoria -->
     <div class="sidebar-box ftco-animate">
-  <h3>Categories</h3>
+  <h3>Categorie</h3>
   <ul class="categories">
-    <li><a href="blog.php">All <span>(<?= $allCount?>)</span></a></li>
+    <li><a href="blog.php">Tutto <span>(<?= $allCount?>)</span></a></li>
     <?php foreach ($categories as $cat): ?>
       <li>
         <a href="blog.php?category=<?= $cat['id'] ?>">
