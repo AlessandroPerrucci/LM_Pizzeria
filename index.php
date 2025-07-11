@@ -83,6 +83,185 @@ $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 	<link rel="stylesheet" href="css/flaticon.css">
 	<link rel="stylesheet" href="css/icomoon.css">
 	<link rel="stylesheet" href="css/style.css">
+	<style>
+		/* Fix completo per il layout delle card del menu */
+
+/* Fix completo per il layout delle card del menu */
+
+.tab-pane .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.tab-pane .col-md-4 {
+    padding: 15px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-wrap {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-wrap:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.menu-wrap .menu-img {
+    width: 100%;
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    display: block;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.menu-wrap .text {
+    padding: 20px;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-wrap .text h3 {
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.3;
+}
+
+.menu-wrap .text p {
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+    flex: 1;
+}
+
+.menu-wrap .price {
+    font-weight: bold;
+    color: #F96D00;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.menu-wrap .price span {
+    font-size: 20px;
+}
+
+.menu-wrap .btn {
+    margin-top: auto;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.menu-wrap .btn-white {
+    background-color: #F96D00;
+    color: white;
+    border: 2px solid #F96D00;
+}
+
+.menu-wrap .btn-white:hover {
+    background-color: transparent;
+    color: #F96D00;
+    border: 2px solid #F96D00;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tab-pane .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .menu-wrap .menu-img {
+        height: 200px;
+    }
+    
+    .menu-wrap .text {
+        padding: 15px;
+    }
+    
+    .menu-wrap .text h3 {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+    .tab-pane .col-md-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 992px) {
+    .tab-pane .col-md-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+}
+
+/* Assicura che tutte le card abbiano la stessa altezza */
+.tab-pane .row {
+    align-items: stretch;
+}
+
+/* Migliora la leggibilità del testo */
+.menu-wrap .text h3,
+.menu-wrap .text p {
+    text-shadow: none;
+}
+
+/* Effetto loading per le immagini */
+.menu-wrap .menu-img {
+    background-color: #f8f9fa;
+    position: relative;
+}
+
+.row .col-md-4:only-child .menu-wrap {
+    width: 200px;
+    margin: 0 auto;
+}
+
+.menu-wrap .menu-img::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: translateX(-100%);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Rimuove l'animazione dopo il caricamento */
+.menu-wrap .menu-img.loaded::before {
+    display: none;
+}
+	</style>
 </head>
 
 <body>
@@ -610,6 +789,100 @@ $recentPosts = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
 	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
 
+	<script>
+		// Miglioramento per le card del menu
+$(document).ready(function() {
+    // Funzione per equalizzare l'altezza delle card
+    function equalizeCardHeights() {
+        $('.tab-pane.active .menu-wrap').each(function() {
+            $(this).css('height', 'auto');
+        });
+        
+        var maxHeight = 0;
+        $('.tab-pane.active .menu-wrap').each(function() {
+            var height = $(this).outerHeight();
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+        
+        $('.tab-pane.active .menu-wrap').css('height', maxHeight + 'px');
+    }
+    
+    // Gestione del cambio di tab
+    $('.nav-pills .nav-link').on('click', function(e) {
+        var targetTab = $(this).attr('href');
+        
+        setTimeout(function() {
+            // Equalizza le altezze dopo il cambio di tab
+            equalizeCardHeights();
+            
+            // Assicura che le immagini abbiano le dimensioni corrette
+            $(targetTab + ' .menu-img').each(function() {
+                var $img = $(this);
+                var bgImage = $img.css('background-image');
+                
+                if (bgImage && bgImage !== 'none') {
+                    $img.addClass('loaded');
+                }
+            });
+        }, 100);
+    });
+    
+    // Equalizza le altezze al caricamento iniziale
+    setTimeout(function() {
+        equalizeCardHeights();
+    }, 500);
+    
+    // Ricarica le altezze al resize della finestra
+    $(window).on('resize', function() {
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(function() {
+            equalizeCardHeights();
+        }, 100);
+    });
+    
+    // Gestione del caricamento delle immagini
+    $('.menu-img').each(function() {
+        var $img = $(this);
+        var bgImage = $img.css('background-image');
+        
+        if (bgImage && bgImage !== 'none') {
+            var imageUrl = bgImage.replace(/url\(['"]?/, '').replace(/['"]?\)$/, '');
+            var img = new Image();
+            
+            img.onload = function() {
+                $img.addClass('loaded');
+                setTimeout(equalizeCardHeights, 50);
+            };
+            
+            img.onerror = function() {
+                $img.addClass('loaded');
+                $img.css('background-image', 'url(images/placeholder.jpg)');
+            };
+            
+            img.src = imageUrl;
+        }
+    });
+});
+
+// Funzione per ricaricare il layout quando necessario
+function refreshMenuLayout() {
+    setTimeout(function() {
+        $('.tab-pane.active .menu-wrap').css('height', 'auto');
+        
+        var maxHeight = 0;
+        $('.tab-pane.active .menu-wrap').each(function() {
+            var height = $(this).outerHeight();
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+        
+        $('.tab-pane.active .menu-wrap').css('height', maxHeight + 'px');
+    }, 100);
+}
+	</script>
 </body>
 
 </html>
